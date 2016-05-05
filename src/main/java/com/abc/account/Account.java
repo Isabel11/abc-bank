@@ -1,7 +1,9 @@
-package com.abc;
+package com.abc.account;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.abc.Transaction;
 
 public class Account {
 
@@ -69,5 +71,5 @@ public void withdraw(double amount) {
     public int getAccountType() {
         return accountType;
     }
-
+    
 }

@@ -3,12 +3,14 @@ package com.abc;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.abc.customer.Customer;
+
 public class Bank {
 	
     private List<Customer> customers;
 
     public Bank() {
-        customers = new ArrayList<Customer>();
+        customers = new ArrayList<>();
     }
 
     public void addCustomer(Customer customer) {
