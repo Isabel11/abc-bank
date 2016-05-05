@@ -2,3 +2,7 @@
 target/
 bin/
 *.iml
+.DS_Store
+.classpath
+.project
+.settings/
