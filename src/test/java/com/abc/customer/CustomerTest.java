@@ -1,94 +1,123 @@
 package com.abc.customer;
 
-import org.junit.Ignore;
-import org.junit.Test;
-
-import com.abc.account.Account;
-import com.abc.customer.Customer;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.junit.Before;
+import org.junit.Test;
+
+import com.abc.account.Account;
+import com.abc.account.AccountType;
 
 public class CustomerTest {
-	
-	
+
 	@Test
-	public void createCustomerZeroAccountsTest(){
-		givenACustomerName();
-		whenCreatingACustomer();
-		thenCustomerExistsAndHasZeroAccounts();
-	}
-	
-	@Test
-	public void customerCreatesOneAccount(){
+	public void createCustomerZeroAccountsTest() {
 		givenADefaultCustomer();
-		givenACheckingAccount();
-		whenOpeningANewAccount();
-		thenCustomerHasOneAccount();
+		whenRequestingNumberOfAccounts();
+		thenCustomerCreatedWithZeroAccounts();
 	}
 
+	@Test
+	public void customerOpensCheckingAccountTest() {
+		givenADefaultCustomer();
+		whenOpeningACheckingAccount();
+		thenCustomerOpenedExpectedAccount();
+	}
 
-	private final static String CUSTOMER_NAME = "NAME";
-	
+	@Test
+	public void customerOpensSavingsAccountTest() {
+		givenADefaultCustomer();
+		whenOpeningASavingsAccount();
+		thenCustomerOpenedExpectedAccount();
+	}
+
+	@Test
+	public void customerOpensMaxiSavingsAccountTest() {
+		givenADefaultCustomer();
+		whenOpeningAMaxiSavingsAccount();
+		thenCustomerOpenedExpectedAccount();
+	}
+
+	@Test
+	public void customerOpensMultipleAccountsTest() {
+		givenADefaultCustomer();
+		whenOpeningMultipleAccounts();
+		thenCustomerOpenedExpectedAccount();
+	}
+
+	private final static String CUSTOMER_NAME = "TEST-NAME";
+	private final static int EXPECTED_NUMBER_CHECKING_ACC = 1;
+	private final static int EXPECTED_NUMBER_SAVING_ACC = 1;
+	private final static int EXPECTED_NUMBER_MAXI_SAVINGS_ACC = 1;
+
 	private String name;
 	private Customer customer;
 	private Account account;
-	private List<Account> accounts;
-	
+	private int returnedNumberOfAccounts;
+	private Account returnedOpenedAccount;
+	private AccountType expectedAccountType;
 
 	@Before
-	public void setUp(){
+	public void setUp() {
 		name = null;
 		customer = null;
 		account = null;
-		accounts = null;
+		returnedNumberOfAccounts = -1;
+		expectedAccountType = null;
 	}
-	
-	//GIVEN
-	
-	private void givenACustomerName() {
-		name = CUSTOMER_NAME;
-	}
-	
+
+	// GIVEN
+
 	private void givenADefaultCustomer() {
-		accounts = new ArrayList<>();
-		customer = new Customer(CUSTOMER_NAME, accounts);
-		
+		customer = new Customer(CUSTOMER_NAME);
 	}
-	
-	private void givenACheckingAccount() {
-		account = new Account(Account.CHECKING);
-	}
-	
-	
-	//WHEN
-	
-	public void whenCreatingACustomer(){
+
+	// WHEN
+
+	public void whenCreatingACustomer() {
 		customer = new Customer(name);
 	}
 
-	private void whenOpeningANewAccount() {
-		// TODO Auto-generated method stub
-		
+	private void whenOpeningACheckingAccount() {
+		expectedAccountType = AccountType.CHECKING;
+		returnedOpenedAccount = customer.openAccount(expectedAccountType);
 	}
 
-	
-	//THEN
-	
-	public void thenCustomerExistsAndHasZeroAccounts(){
-		assertNotNull("Customer was null",customer);
-		assertEquals("Unexpected customer name", CUSTOMER_NAME, customer.getName());
-		assertEquals("Number of accounts is not 0", 0, customer.getNumberOfAccounts());
+	private void whenOpeningASavingsAccount() {
+		expectedAccountType = AccountType.SAVINGS;
+		returnedOpenedAccount = customer.openAccount(expectedAccountType);
 	}
-	
-	private void thenCustomerHasOneAccount() {
-		// TODO Auto-generated method stub
-		
+
+	private void whenOpeningAMaxiSavingsAccount() {
+		expectedAccountType = AccountType.MAXI_SAVINGS;
+		returnedOpenedAccount = customer.openAccount(expectedAccountType);
 	}
-    
+
+	private void whenRequestingNumberOfAccounts() {
+		returnedNumberOfAccounts = customer.getNumberOfAccounts();
+	}
+
+	private void whenOpeningMultipleAccounts() {
+
+	}
+
+	// THEN
+
+	public void thenCustomerCreatedWithZeroAccounts() {
+		assertNotNull("Customer was null.", customer);
+		assertEquals("Unexpected customer name.", CUSTOMER_NAME, customer.getName());
+		assertEquals("Number of accounts is not 0.", 0, customer.getNumberOfAccounts());
+	}
+
+	private void thenCustomerOpenedExpectedAccount() {
+		// TODO assert that type of returned account is correct
+		// assertTrue("Customer failed to open checking account.",
+		// returnedOpenAccountResult);
+		assertEquals("Incorrect number of accounts returned.", 1, customer.getNumberOfAccounts());
+		// TODO Fix we need to check the account type
+		// assertEquals("Invalid account type", expectedAccountType,
+		// accounts.get(0).getAccountType());
+	}
+
 }
