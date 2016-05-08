@@ -1,14 +1,6 @@
 package com.abc.bank;
 
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Test;
-
-import com.abc.account.AbstractAccount;
-import com.abc.account.AccountType;
-import com.abc.bank.Bank;
-import com.abc.customer.Customer;
-import com.abc.customer.OpenAccountException;
 
 /**
  * 
@@ -17,55 +9,57 @@ import com.abc.customer.OpenAccountException;
  */
 public class BankTest {
 
-	private static final double DOUBLE_DELTA = 1e-15;
-
 	@Test
-	public void customerSummary() throws OpenAccountException {
-		Bank bank = new Bank();
-		Customer john = new Customer("John");
-		john.openAccount(AccountType.CHECKING);
-		bank.addCustomer(john);
+	public void addNewCustomerSuccessfullyTest() {
 
-		assertEquals("Customer Summary\n - John (1 account)", bank.customerSummary());
 	}
 
 	@Test
-	public void checkingAccount() throws OpenAccountException {
-		Bank bank = new Bank();
-		AbstractAccount checkingAccount = null;
-		Customer bill = new Customer("Bill");
-		bill.openAccount(AccountType.CHECKING);
-		bank.addCustomer(bill);
+	public void addNullCustomerTest() {
 
-		checkingAccount.deposit(100.0);
-
-		assertEquals(0.1, bank.totalInterestPaid(), DOUBLE_DELTA);
 	}
 
 	@Test
-	public void savings_account() throws OpenAccountException {
-		Bank bank = new Bank();
-		AbstractAccount checkingAccount = null;
-		Customer bill = new Customer("Bill");
-		bank.addCustomer(bill);
-		bill.openAccount(AccountType.SAVINGS);
+	public void getCustomerSummarySuccessfullyTest() {
 
-		checkingAccount.deposit(1500.0);
-
-		assertEquals(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
 	}
 
 	@Test
-	public void maxi_savings_account() throws OpenAccountException {
-		Bank bank = new Bank();
-		AbstractAccount checkingAccount = null;
-		Customer bill = new Customer("Bill");
-		bank.addCustomer(bill);
-		bill.openAccount(AccountType.MAXI_SAVINGS);
+	public void getCustomerSummaryNoCustomersTest() {
 
-		checkingAccount.deposit(3000.0);
-
-		assertEquals(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
 	}
 
+	@Test
+	public void getFirstCustomerOneCustomerInBankTest() {
+
+	}
+
+	@Test
+	public void getFirstCustomerMultipleCustomersInBankTest() {
+
+	}
+
+	@Test
+	public void getFirstCustomerMultipleCustomersSameNameInBankTest() {
+
+	}
+
+	@Test
+	public void getFirstCustomerNoCustomersInBankTest() {
+
+	}
+
+	// TODO Isabel tests for total interest
+
+	public void setUp() {
+
+	}
+
+	// GIVEN
+
+	// WHEN
+
+	// THEN
+
+	// HELPER
 }

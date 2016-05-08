@@ -36,6 +36,7 @@ public class Bank implements IBank {
 	// in:
 	// If number passed in is 1 just return the word otherwise add an 's' at the
 	// end
+	// TODO Isabel remove this
 	private String format(int number, String word) {
 		return number + " " + (number == 1 ? word : word + "s");
 	}
