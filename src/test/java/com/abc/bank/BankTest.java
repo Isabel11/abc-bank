@@ -9,6 +9,7 @@ import static org.junit.Assert.fail;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import com.abc.customer.Customer;
@@ -46,6 +47,12 @@ public class BankTest {
 	}
 
 	@Test
+	public void addSameCustomerTest() {
+		givenABank();
+		fail();
+	}
+
+	@Test
 	public void getCustomerSummarySuccessfullyTest() {
 		givenABank();
 		givenACustomerAddedToTheBank();
@@ -66,7 +73,6 @@ public class BankTest {
 		givenACustomerAddedToTheBank();
 		whenGettingTheFirstCustomer();
 		thenFirstCustomerReturned();
-
 	}
 
 	@Test
@@ -86,6 +92,7 @@ public class BankTest {
 	// TODO Isabel tests for total interest
 
 	private static final String DEFAULT_CUSTOMER_NAME = "CustomerName";
+	private static final String DEFAULT_BANK_NAME = "Bank";
 
 	private CustomerRepository customerRepository;
 	private IBank bank;
@@ -97,6 +104,7 @@ public class BankTest {
 	private Customer expectedFirstCustomer;
 	private Customer returnedFirstCustomer;
 
+	@Before
 	public void setUp() {
 		customerRepository = null;
 		bank = null;
@@ -113,7 +121,7 @@ public class BankTest {
 
 	private void givenABank() {
 		customerRepository = new CustomerRepository();
-		bank = new Bank(customerRepository);
+		bank = new Bank(customerRepository, DEFAULT_BANK_NAME);
 	}
 
 	private void givenOneCustomer() {
@@ -134,13 +142,19 @@ public class BankTest {
 	}
 
 	private void givenACustomerAddedToTheBank() {
-		bank.addCustomer(new Customer(DEFAULT_CUSTOMER_NAME));
+		Customer customer = new Customer(DEFAULT_CUSTOMER_NAME);
+		expectedFirstCustomer = customer;
+		bank.addCustomer(customer);
 	}
 
 	private void givenMultipleCustomersAddedToTheBank() {
 		expectedNumberOfCustomers = 4;
 		for (int i = 0; i < expectedNumberOfCustomers; i++) {
-			bank.addCustomer(new Customer(DEFAULT_CUSTOMER_NAME + i));
+			Customer customer = new Customer(DEFAULT_CUSTOMER_NAME + i);
+			if (i == 0) {
+				expectedFirstCustomer = customer;
+			}
+			bank.addCustomer(customer);
 		}
 	}
 
@@ -162,7 +176,7 @@ public class BankTest {
 	}
 
 	private void whenRequestingCustomerSummary() {
-		returnedCustomerSummary = bank.customerSummary();
+		returnedCustomerSummary = bank.generateCustomerSummary();
 	}
 
 	private void whenGettingTheFirstCustomer() throws NoCustomerException {
@@ -178,7 +192,7 @@ public class BankTest {
 	}
 
 	private void thenNoCustomersInRepository() {
-		// TODO mockito repository add called
+		// TODO mockito repository add is NOT called
 		assertFalse("Adding customer should have failed", returnedAddCustomerResult);
 		assertEquals("Expected empty customer repository.", expectedNumberOfCustomers, customerRepository.getNumberOfCustomers());
 

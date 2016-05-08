@@ -23,11 +23,17 @@ public interface IBank {
 	boolean addCustomer(Customer customer);
 
 	/**
-	 * It's not really clear what this is supposed to do (yet).
+	 * <p>
+	 * Returns a summary of all customers in the bank.
+	 * </p>
+	 * <p>
+	 * Creates a summary for each customer including customer's name and number
+	 * of accounts the customer owns.
+	 * </p>
 	 * 
-	 * @return A summary of the customer.
+	 * @return A summary {@link String} of all customers of the bank.
 	 */
-	String customerSummary();
+	String generateCustomerSummary();
 
 	/**
 	 * TODO Isabel this is very vague but I guess this is all interests the bank
@@ -39,6 +45,8 @@ public interface IBank {
 
 	/**
 	 * @return The first {@link Customer} added to this bank.
+	 * @throws NoCustomerException
+	 *             if the bank has no customers.
 	 */
 	Customer getFirstCustomer() throws NoCustomerException;
 

@@ -31,8 +31,19 @@ public class CustomerRepository {
 		return customers.size();
 	}
 
+	public boolean hasCustomers() {
+		return customers.size() > 0;
+	}
+
 	public List<Customer> getAllCustomers() {
 		return Collections.unmodifiableList(customers);
 	}
 
+	public Customer getFirstCustomer() throws NoCustomerException {
+		if (customers.size() > 0) {
+			return customers.get(0);
+		} else {
+			throw new NoCustomerException("There are no customers in this repository.");
+		}
+	}
 }

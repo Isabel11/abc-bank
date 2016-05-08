@@ -1,6 +1,9 @@
 package com.abc.bank;
 
+import java.util.logging.Level;
+
 import com.abc.customer.Customer;
+import com.sun.istack.internal.logging.Logger;
 
 /**
  * Representation of a concrete bank that implements the behaviour of the
@@ -11,33 +14,33 @@ import com.abc.customer.Customer;
  */
 public class Bank implements IBank {
 
-	private CustomerRepository customerRepository;
+	private final static Logger LOGGER = Logger.getLogger(Bank.class);
 
-	public Bank(final CustomerRepository customerRepository) {
+	private final String name;
+
+	private final CustomerRepository customerRepository;
+
+	public Bank(final String name) {
+		this(new CustomerRepository(), name);
+	}
+
+	public Bank(final CustomerRepository customerRepository, String name) {
 		// TODO Isabel assert not null
+		this.name = name;
 		this.customerRepository = customerRepository;
 	}
 
 	@Override
 	public boolean addCustomer(Customer customer) {
+		if (customer == null) {
+			return false;
+		}
 		return customerRepository.addCustomer(customer);
 	}
 
 	@Override
-	public String customerSummary() {
-		String summary = "Customer Summary";
-		for (Customer c : customerRepository.getAllCustomers())
-			summary += "\n - " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")";
-		return summary;
-	}
-
-	// Make sure correct plural of word is created based on the number passed
-	// in:
-	// If number passed in is 1 just return the word otherwise add an 's' at the
-	// end
-	// TODO Isabel remove this
-	private String format(int number, String word) {
-		return number + " " + (number == 1 ? word : word + "s");
+	public String generateCustomerSummary() {
+		return CustomerSummaryGenerator.generateCustomerSummary(customerRepository);
 	}
 
 	@Override
@@ -51,14 +54,43 @@ public class Bank implements IBank {
 	@Override
 	public Customer getFirstCustomer() throws NoCustomerException {
 		try {
-			return null;
-			// customers = null;
-			// return customers.get(0);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
+			return customerRepository.getFirstCustomer();
+		} catch (NoCustomerException e) {
+			LOGGER.log(Level.WARNING, "Failed to get first customer of bank " + name + ". Reason: " + e.getMessage());
+			throw e;
 		}
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((customerRepository == null) ? 0 : customerRepository.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Bank other = (Bank) obj;
+		if (customerRepository == null) {
+			if (other.customerRepository != null)
+				return false;
+		} else if (!customerRepository.equals(other.customerRepository))
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "Bank [customerRepository=" + customerRepository + "]";
+	}
+
 	// TODO Isabel guava equals hashcode etc
+
 }
