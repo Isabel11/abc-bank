@@ -3,6 +3,11 @@ package com.abc.customer;
 import com.abc.account.Account;
 import com.abc.account.AccountType;
 
+/**
+ * 
+ * @author Isabel Peters (isabel.rlpeters@googlemail.com)
+ *
+ */
 public interface ICustomer {
 
 	/**
@@ -17,8 +22,10 @@ public interface ICustomer {
 	 *            The type of the account to open.
 	 * @return <code>true</code> if account was opened successfully;
 	 *         <code>false</code> otherwise.
+	 * @throws OpenAccountException
+	 *             If opening of the account failed.
 	 */
-	Account openAccount(AccountType accountType);
+	Account openAccount(AccountType accountType) throws OpenAccountException;
 
 	/**
 	 * @return The number of the accounts the customer currently holds.

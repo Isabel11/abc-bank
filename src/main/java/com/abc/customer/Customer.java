@@ -14,7 +14,7 @@ import com.abc.account.AccountType;
  */
 public class Customer implements ICustomer {
 
-	// TODO probably want to add a UUID
+	// TODO Isabel probably want to add a UUID
 
 	private String name;
 
@@ -31,7 +31,7 @@ public class Customer implements ICustomer {
 	}
 
 	@Override
-	public Account openAccount(AccountType accountType) {
+	public Account openAccount(AccountType accountType) throws OpenAccountException {
 		// TODO implement
 		return null;
 	}
