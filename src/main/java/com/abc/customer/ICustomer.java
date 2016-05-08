@@ -38,7 +38,10 @@ public interface ICustomer {
 	double totalInterestEarned();
 
 	/**
+	 * TODO Isabel think about a statement object
+	 * <p>
 	 * Return the statement for all accounts the customer owns.
+	 * </p>
 	 * 
 	 * @return A statement including all accounts;
 	 */

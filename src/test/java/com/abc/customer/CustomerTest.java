@@ -3,6 +3,7 @@ package com.abc.customer;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -89,7 +90,31 @@ public class CustomerTest {
 		givenAnOpenedAccountFailure();
 		whenRequestingNumberOfAccounts();
 		thenNoAccountsHaveBeenOpened();
+	}
 
+	// TODO write interest tests
+
+	@Test
+	public void returnedStatementNoAccountsTest() {
+		givenADefaultCustomer();
+		whenRequestingAStatement();
+		thenStatementReturned();
+	}
+
+	@Test
+	public void returnedStatementOneAccountsTest() throws OpenAccountException {
+		givenADefaultCustomer();
+		givenOneOpenedAccount();
+		whenRequestingAStatement();
+		thenStatementReturned();
+	}
+
+	@Test
+	public void returnedStatementMultipleAccountsTest() throws OpenAccountException {
+		givenADefaultCustomer();
+		givenMultipleOpenedAccount();
+		whenRequestingAStatement();
+		thenStatementReturned();
 	}
 
 	private final static String CUSTOMER_NAME = "TEST-NAME";
@@ -103,6 +128,7 @@ public class CustomerTest {
 	private List<AccountType> returnedOpenedAccountTypes;
 	private int expectedNumberOfAccounts;
 	private int returnedNumberOfAccounts;
+	private String returnedStatement;
 
 	@Before
 	public void setUp() {
@@ -156,6 +182,7 @@ public class CustomerTest {
 
 	private void givenAnOpenedAccountFailure() {
 		// TODO Isabel use mockito here to mock failure
+		fail("Implement this");
 	}
 
 	// WHEN
@@ -177,6 +204,10 @@ public class CustomerTest {
 
 	private void whenRequestingNumberOfAccounts() {
 		returnedNumberOfAccounts = customer.getNumberOfAccounts();
+	}
+
+	private void whenRequestingAStatement() {
+		returnedStatement = customer.getStatement();
 	}
 
 	// THEN
@@ -203,7 +234,11 @@ public class CustomerTest {
 	}
 
 	private void thenNoAccountsHaveBeenOpened() {
-		assertEquals("Opening an account failed but number of accounts returned is >0", 0, returnedNumberOfAccounts);
+		assertEquals("Opening an account failed but number of accounts returned is > 0", 0, returnedNumberOfAccounts);
+	}
+
+	private void thenStatementReturned() {
+		assertNotNull("Returned statement was null", returnedStatement);
 	}
 
 	// HELPER
