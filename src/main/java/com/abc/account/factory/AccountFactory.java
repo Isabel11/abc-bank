@@ -1,7 +1,7 @@
 package com.abc.account.factory;
 
 import com.abc.account.Account;
-import com.abc.account.AccountType;
+import com.abc.account.types.AccountType;
 
 /**
  * 

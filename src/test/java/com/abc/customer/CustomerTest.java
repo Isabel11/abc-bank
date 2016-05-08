@@ -12,8 +12,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.abc.account.Account;
-import com.abc.account.AccountType;
 import com.abc.account.factory.AccountCreationException;
+import com.abc.account.types.AccountType;
+import com.abc.customer.exception.OpenAccountException;
 
 /**
  * 

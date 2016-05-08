@@ -1,4 +1,4 @@
-package com.abc.customer;
+package com.abc.customer.exception;
 
 /**
  * Thrown if opening of an account fails.

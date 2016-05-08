@@ -1,10 +1,8 @@
-package com.abc.account;
+package com.abc.account.transaction;
 
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-
-import com.abc.account.transaction.ITransaction;
 
 public class TransactionRepository {
 

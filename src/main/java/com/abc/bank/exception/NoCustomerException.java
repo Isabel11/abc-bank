@@ -1,4 +1,4 @@
-package com.abc.bank;
+package com.abc.bank.exception;
 
 public class NoCustomerException extends Exception {
 

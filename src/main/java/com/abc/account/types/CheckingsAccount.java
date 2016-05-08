@@ -1,14 +1,16 @@
-package com.abc.account;
+package com.abc.account.types;
+
+import com.abc.account.Account;
 
 /**
  * 
  * @author Isabel Peters (isabel.rlpeters@googlemail.com)
  *
  */
-public class SavingsAccount extends Account {
+public class CheckingsAccount extends Account {
 
-	public SavingsAccount() {
-		super(AccountType.SAVINGS);
+	public CheckingsAccount() {
+		super(AccountType.CHECKING);
 	}
 
 	@Override

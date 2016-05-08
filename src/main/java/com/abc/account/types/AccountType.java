@@ -1,4 +1,4 @@
-package com.abc.account;
+package com.abc.account.types;
 
 /**
  * Representation of the three different types of accounts.

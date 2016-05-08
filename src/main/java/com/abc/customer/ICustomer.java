@@ -1,7 +1,8 @@
 package com.abc.customer;
 
 import com.abc.account.Account;
-import com.abc.account.AccountType;
+import com.abc.account.types.AccountType;
+import com.abc.customer.exception.OpenAccountException;
 
 /**
  * 

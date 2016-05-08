@@ -1,4 +1,6 @@
-package com.abc.account;
+package com.abc.account.types;
+
+import com.abc.account.Account;
 
 /**
  * 

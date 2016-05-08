@@ -1,4 +1,4 @@
-package com.abc.customer;
+package com.abc.customer.repository;
 
 /**
  * Account repository for a customer.
