@@ -3,7 +3,7 @@ package com.abc.customer;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.abc.account.Account;
+import com.abc.account.AbstractAccount;
 import com.abc.account.AccountType;
 import com.abc.account.statement.AccountStatementGenerator;
 
@@ -18,7 +18,7 @@ public class Customer implements ICustomer {
 
 	private String name;
 
-	private List<Account> accounts;
+	private List<AbstractAccount> accounts;
 
 	public Customer(String name) {
 		this.name = name;
@@ -31,7 +31,7 @@ public class Customer implements ICustomer {
 	}
 
 	@Override
-	public Account openAccount(AccountType accountType) throws OpenAccountException {
+	public AbstractAccount openAccount(AccountType accountType) throws OpenAccountException {
 		// TODO implement
 		return null;
 	}
@@ -45,7 +45,7 @@ public class Customer implements ICustomer {
 	public double totalInterestEarned() {
 		double totalInterests = 0;
 
-		for (Account account : accounts)
+		for (AbstractAccount account : accounts)
 			totalInterests += account.interestEarned();
 
 		return totalInterests;

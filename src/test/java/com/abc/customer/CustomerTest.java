@@ -11,7 +11,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.abc.account.Account;
+import com.abc.account.AbstractAccount;
 import com.abc.account.AccountType;
 import com.abc.account.factory.AccountCreationException;
 
@@ -122,7 +122,7 @@ public class CustomerTest {
 
 	private String name;
 	private ICustomer customer;
-	private Account returnedOpenedAccount;
+	private AbstractAccount returnedOpenedAccount;
 	private AccountType expectedAccountType;
 	private List<AccountType> accountTypesToOpen;
 	private List<AccountType> returnedOpenedAccountTypes;
@@ -197,7 +197,7 @@ public class CustomerTest {
 
 	private void whenOpeningMultipleAccounts() throws OpenAccountException {
 		for (int i = 0; i < accountTypesToOpen.size(); i++) {
-			Account openedAccount = customer.openAccount(accountTypesToOpen.get(i));
+			AbstractAccount openedAccount = customer.openAccount(accountTypesToOpen.get(i));
 			returnedOpenedAccountTypes.add(openedAccount.getAccountType());
 		}
 	}

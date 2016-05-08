@@ -5,7 +5,7 @@ import static java.lang.Math.abs;
 import java.util.List;
 
 import com.abc.Transaction;
-import com.abc.account.Account;
+import com.abc.account.AbstractAccount;
 import com.abc.customer.Customer;
 
 /**
@@ -25,12 +25,12 @@ public class AccountStatementGenerator {
 	 *            The list of accounts to generate the statement for.
 	 * @return A full statement of all accounts.
 	 */
-	public static String generateForAllAccounts(final Customer customer, final List<Account> accounts) {
+	public static String generateForAllAccounts(final Customer customer, final List<AbstractAccount> accounts) {
 		final StringBuilder builder = new StringBuilder();
 		builder.append("Statement for " + customer.getName() + "\n");
 
 		double total = 0.0;
-		for (Account account : accounts) {
+		for (AbstractAccount account : accounts) {
 			builder.append("\n");
 			appendStatementForAccount(builder, account);
 			builder.append("\n");
@@ -42,7 +42,7 @@ public class AccountStatementGenerator {
 		return builder.toString();
 	}
 
-	private static String appendStatementForAccount(final StringBuilder builder, final Account account) {
+	private static String appendStatementForAccount(final StringBuilder builder, final AbstractAccount account) {
 		builder.append(account.getAccountType().toString());
 
 		double totalTransactions = 0.0;

@@ -4,7 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import com.abc.account.Account;
+import com.abc.account.AbstractAccount;
 import com.abc.account.AccountType;
 import com.abc.customer.Customer;
 import com.abc.customer.OpenAccountException;
@@ -26,7 +26,7 @@ public class BankTest {
 	@Test
 	public void checkingAccount() throws OpenAccountException {
 		Bank bank = new Bank();
-		Account checkingAccount = new Account(Account.CHECKING);
+		AbstractAccount checkingAccount = null;
 		Customer bill = new Customer("Bill");
 		bill.openAccount(AccountType.CHECKING);
 		bank.addCustomer(bill);
@@ -39,7 +39,7 @@ public class BankTest {
 	@Test
 	public void savings_account() throws OpenAccountException {
 		Bank bank = new Bank();
-		Account checkingAccount = new Account(Account.SAVINGS);
+		AbstractAccount checkingAccount = null;
 		Customer bill = new Customer("Bill");
 		bank.addCustomer(bill);
 		bill.openAccount(AccountType.SAVINGS);
@@ -52,7 +52,7 @@ public class BankTest {
 	@Test
 	public void maxi_savings_account() throws OpenAccountException {
 		Bank bank = new Bank();
-		Account checkingAccount = new Account(Account.MAXI_SAVINGS);
+		AbstractAccount checkingAccount = null;
 		Customer bill = new Customer("Bill");
 		bank.addCustomer(bill);
 		bill.openAccount(AccountType.MAXI_SAVINGS);

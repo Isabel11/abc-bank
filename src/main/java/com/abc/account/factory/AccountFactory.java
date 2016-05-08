@@ -1,6 +1,6 @@
 package com.abc.account.factory;
 
-import com.abc.account.Account;
+import com.abc.account.AbstractAccount;
 import com.abc.account.AccountType;
 
 /**
@@ -10,7 +10,7 @@ import com.abc.account.AccountType;
  */
 public class AccountFactory {
 
-	public static Account create(AccountType accountType) throws AccountCreationException {
+	public static AbstractAccount create(AccountType accountType) throws AccountCreationException {
 		if (accountType == null) {
 			throw new AccountCreationException("Could not generate account. Account type is null.");
 		}
@@ -18,11 +18,11 @@ public class AccountFactory {
 		// use polymorphism to generate different accounts;
 		switch (accountType) {
 			case CHECKING:
-				return new Account(accountType);
+				return null;
 			case MAXI_SAVINGS:
-				return new Account(accountType);
+				return null;
 			case SAVINGS:
-				return new Account(accountType);
+				return null;
 			default:
 				// this should never happen.
 				return null;
