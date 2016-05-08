@@ -1,5 +1,10 @@
 package com.abc.account;
 
+/**
+ * 
+ * @author Isabel Peters (isabel.rlpeters@googlemail.com)
+ *
+ */
 public class SavingsAccount extends AbstractAccount {
 
 	public SavingsAccount() {

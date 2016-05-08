@@ -10,6 +10,11 @@ import com.abc.bank.Bank;
 import com.abc.customer.Customer;
 import com.abc.customer.OpenAccountException;
 
+/**
+ * 
+ * @author Isabel Peters (isabel.rlpeters@googlemail.com)
+ *
+ */
 public class BankTest {
 
 	private static final double DOUBLE_DELTA = 1e-15;
