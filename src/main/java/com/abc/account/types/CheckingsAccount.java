@@ -1,5 +1,7 @@
 package com.abc.account.types;
 
+import java.math.BigDecimal;
+
 import com.abc.account.Account;
 
 /**
@@ -14,9 +16,9 @@ public class CheckingsAccount extends Account {
 	}
 
 	@Override
-	public double interestEarned() {
+	public BigDecimal interestEarned() {
 		// TODO Auto-generated method stub
-		return 0;
+		return BigDecimal.ZERO;
 	}
 
 	// TODO Isabel guava equals hashcode etc

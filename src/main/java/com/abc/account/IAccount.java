@@ -1,5 +1,6 @@
 package com.abc.account;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import com.abc.account.transaction.ITransaction;
@@ -12,13 +13,13 @@ import com.abc.account.types.AccountType;
  */
 public interface IAccount {
 
-	void deposit(double amount);
+	ITransaction deposit(BigDecimal amount);
 
-	void withdraw(double amount);
+	ITransaction withdraw(BigDecimal amount);
 
-	double interestEarned();
+	BigDecimal interestEarned();
 
-	double sumTransactions();
+	BigDecimal sumTransactions();
 
 	AccountType getAccountType();
 

@@ -1,7 +1,6 @@
 package com.abc.account.statement;
 
-import static java.lang.Math.abs;
-
+import java.math.BigDecimal;
 import java.util.List;
 
 import com.abc.account.IAccount;
@@ -29,13 +28,13 @@ public class AccountStatementGenerator {
 		final StringBuilder builder = new StringBuilder();
 		builder.append("Statement for " + customer.getName() + "\n");
 
-		double total = 0.0;
+		BigDecimal total = BigDecimal.ZERO;
 		for (IAccount account : accounts) {
 			builder.append("\n");
 			appendStatementForAccount(builder, account);
 			builder.append("\n");
 
-			total += account.sumTransactions();
+			total = total.add(account.sumTransactions());
 		}
 
 		builder.append("\nTotal In All Accounts " + toDollars(total));
@@ -45,14 +44,14 @@ public class AccountStatementGenerator {
 	private static String appendStatementForAccount(final StringBuilder builder, final IAccount account) {
 		builder.append(account.getAccountType().toString());
 
-		double totalTransactions = 0.0;
+		BigDecimal totalTransactions = BigDecimal.ZERO;
 		for (ITransaction transaction : account.getTransactions()) {
 			builder.append("\t");
-			builder.append(transaction.getAmount() < 0 ? "withdrawal" : "deposit");
+			builder.append(transaction.getAmount().compareTo(BigDecimal.ZERO) < 0 ? "withdrawal" : "deposit");
 			builder.append(" ");
 			builder.append(toDollars(transaction.getAmount()));
 			builder.append("\n");
-			totalTransactions += transaction.getAmount();
+			totalTransactions = totalTransactions.add(transaction.getAmount());
 		}
 
 		builder.append("Total " + toDollars(totalTransactions));
@@ -60,9 +59,10 @@ public class AccountStatementGenerator {
 		return builder.toString();
 	}
 
-	private static String toDollars(double d) {
+	private static String toDollars(BigDecimal d) {
 		// TODO Isabel abs ??
-		return String.format("$%,.2f", abs(d));
+		return null;
+		// return String.format("$%,.2f", abs(d));
 	}
 
 }

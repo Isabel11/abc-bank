@@ -1,5 +1,7 @@
 package com.abc.customer;
 
+import java.math.BigDecimal;
+
 import com.abc.account.Account;
 import com.abc.account.types.AccountType;
 import com.abc.customer.exception.OpenAccountException;
@@ -36,7 +38,7 @@ public interface ICustomer {
 	/**
 	 * @return The total of interests earned among all accounts.
 	 */
-	double totalInterestEarned();
+	BigDecimal totalInterestEarned();
 
 	/**
 	 * TODO Isabel think about a statement object

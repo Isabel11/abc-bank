@@ -1,5 +1,6 @@
 package com.abc.bank;
 
+import java.math.BigDecimal;
 import java.util.logging.Level;
 
 import com.abc.bank.exception.NoCustomerException;
@@ -47,10 +48,10 @@ public class Bank implements IBank {
 	}
 
 	@Override
-	public double totalInterestPaid() {
-		double total = 0;
+	public BigDecimal totalInterestPaid() {
+		BigDecimal total = BigDecimal.ZERO;
 		for (ICustomer c : customerRepository.getAllCustomers())
-			total += c.totalInterestEarned();
+			total = total.add(c.totalInterestEarned());
 		return total;
 	}
 

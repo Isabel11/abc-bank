@@ -1,5 +1,6 @@
 package com.abc.account;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import com.abc.account.transaction.ITransaction;
@@ -24,34 +25,38 @@ public abstract class Account implements IAccount {
 	}
 
 	@Override
-	public void deposit(double amount) {
-		if (amount <= 0) {
+	public ITransaction deposit(BigDecimal amount) {
+		validateAmount(amount);
+		ITransaction successfulTransaction = new Transaction.SuccessfulTransaction(amount, null);
+		transactions.addTransaction(successfulTransaction);
+		return successfulTransaction;
+	}
+
+	@Override
+	public ITransaction withdraw(BigDecimal amount) {
+		validateAmount(amount);
+		BigDecimal negativeAmount = amount.multiply(BigDecimal.valueOf(-1));
+		transactions.addTransaction(new Transaction.SuccessfulTransaction(negativeAmount, null));
+
+		return null;
+	}
+
+	private void validateAmount(BigDecimal amount) {
+		if (amount.compareTo(BigDecimal.ZERO) == 0 || amount.compareTo(BigDecimal.ZERO) < 0) {
 			throw new IllegalArgumentException("amount must be greater than zero");
-		} else {
-			transactions.addTransaction(new Transaction(amount));
 		}
 	}
 
 	@Override
-	public void withdraw(double amount) {
-		if (amount <= 0) {
-			throw new IllegalArgumentException("amount must be greater than zero");
-		} else {
-			// TODO Isabel
-			transactions.addTransaction(new Transaction(-amount));
-		}
-	}
-
-	@Override
-	public double sumTransactions() {
+	public BigDecimal sumTransactions() {
 		return checkIfTransactionsExist(true);
 	}
 
 	// TODO Isabel
-	private double checkIfTransactionsExist(boolean checkAll) {
-		double amount = 0.0;
+	private BigDecimal checkIfTransactionsExist(boolean checkAll) {
+		BigDecimal amount = BigDecimal.ZERO;
 		for (ITransaction transactions : transactions.getAllTransactions())
-			amount += transactions.getAmount();
+			amount = amount.add(transactions.getAmount());
 		return amount;
 	}
 

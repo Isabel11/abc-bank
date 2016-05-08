@@ -1,5 +1,6 @@
 package com.abc.customer;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,11 +45,11 @@ public class Customer implements ICustomer {
 	}
 
 	@Override
-	public double totalInterestEarned() {
-		double totalInterests = 0;
+	public BigDecimal totalInterestEarned() {
+		BigDecimal totalInterests = BigDecimal.ZERO;
 
 		for (IAccount account : accounts)
-			totalInterests += account.interestEarned();
+			totalInterests = totalInterests.add(account.interestEarned());
 
 		return totalInterests;
 	}

@@ -1,5 +1,7 @@
 package com.abc.bank;
 
+import java.math.BigDecimal;
+
 import com.abc.bank.exception.NoCustomerException;
 import com.abc.customer.Customer;
 import com.abc.customer.ICustomer;
@@ -43,7 +45,7 @@ public interface IBank {
 	 * 
 	 * @return
 	 */
-	double totalInterestPaid();
+	BigDecimal totalInterestPaid();
 
 	/**
 	 * @return The first {@link Customer} added to this bank.
