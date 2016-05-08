@@ -4,8 +4,8 @@ import static java.lang.Math.abs;
 
 import java.util.List;
 
-import com.abc.Transaction;
 import com.abc.account.AbstractAccount;
+import com.abc.account.transaction.Transaction;
 import com.abc.customer.Customer;
 
 /**

@@ -3,7 +3,7 @@ package com.abc.account;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.abc.Transaction;
+import com.abc.account.transaction.Transaction;
 
 /**
  * 
