@@ -1,18 +1,28 @@
 package com.abc.account.transaction;
 
-import java.util.Calendar;
 import java.util.Date;
 
 import com.abc.utils.DateProvider;
 
-public class Transaction {
-    public final double amount;
+public class Transaction implements ITransaction {
 
-    private Date transactionDate;
+	private final double amount;
 
-    public Transaction(double amount) {
-        this.amount = amount;
-        this.transactionDate = DateProvider.getInstance().now();
-    }
+	private final Date transactionDate;
+
+	public Transaction(double amount) {
+		this.amount = amount;
+		this.transactionDate = DateProvider.getInstance().now();
+	}
+
+	@Override
+	public double getAmount() {
+		return amount;
+	}
+
+	@Override
+	public Date getTransactionDate() {
+		return transactionDate;
+	}
 
 }
