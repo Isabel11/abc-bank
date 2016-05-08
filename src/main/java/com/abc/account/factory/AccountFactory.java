@@ -1,4 +1,7 @@
-package com.abc.account;
+package com.abc.account.factory;
+
+import com.abc.account.Account;
+import com.abc.account.AccountType;
 
 /**
  * 
@@ -7,9 +10,9 @@ package com.abc.account;
  */
 public class AccountFactory {
 
-	public static Account create(AccountType accountType) throws AccountGenerationException {
+	public static Account create(AccountType accountType) throws AccountCreationException {
 		if (accountType == null) {
-			throw new AccountGenerationException("Could not generate account. Account type is null.");
+			throw new AccountCreationException("Could not generate account. Account type is null.");
 		}
 
 		// use polymorphism to generate different accounts;

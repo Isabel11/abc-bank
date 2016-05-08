@@ -1,10 +1,11 @@
-package com.abc.account;
+package com.abc.account.statement;
 
 import static java.lang.Math.abs;
 
 import java.util.List;
 
 import com.abc.Transaction;
+import com.abc.account.Account;
 import com.abc.customer.Customer;
 
 /**

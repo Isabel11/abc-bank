@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.abc.account.Account;
-import com.abc.account.AccountStatementGenerator;
 import com.abc.account.AccountType;
+import com.abc.account.statement.AccountStatementGenerator;
 
 /**
  * Representation of a bank customer.

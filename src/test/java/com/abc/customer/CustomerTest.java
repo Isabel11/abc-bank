@@ -12,8 +12,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.abc.account.Account;
-import com.abc.account.AccountGenerationException;
 import com.abc.account.AccountType;
+import com.abc.account.factory.AccountCreationException;
 
 /**
  * 
@@ -53,7 +53,7 @@ public class CustomerTest {
 		thenCustomerOpenedExpectedAccount();
 	}
 
-	@Test(expected = AccountGenerationException.class)
+	@Test(expected = AccountCreationException.class)
 	public void customerOpensNullAccountType() throws OpenAccountException {
 		givenADefaultCustomer();
 		givenANullAccountType();
