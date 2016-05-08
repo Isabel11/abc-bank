@@ -1,4 +1,4 @@
-package com.abc;
+package com.abc.bank;
 
 import static org.junit.Assert.assertEquals;
 

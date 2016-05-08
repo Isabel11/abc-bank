@@ -19,8 +19,9 @@ public class Bank implements IBank {
 	}
 
 	@Override
-	public void addCustomer(Customer customer) {
+	public boolean addCustomer(Customer customer) {
 		customers.add(customer);
+		return false;
 	}
 
 	@Override
@@ -48,13 +49,13 @@ public class Bank implements IBank {
 	}
 
 	@Override
-	public String getFirstCustomer() {
+	public Customer getFirstCustomer() {
 		try {
 			customers = null;
-			return customers.get(0).getName();
+			return customers.get(0);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return "Error";
+			return null;
 		}
 	}
 }
