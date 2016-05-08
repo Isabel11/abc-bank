@@ -5,7 +5,7 @@ package com.abc.account;
  * @author Isabel Peters (isabel.rlpeters@googlemail.com)
  *
  */
-public class SavingsAccount extends AbstractAccount {
+public class SavingsAccount extends Account {
 
 	public SavingsAccount() {
 		super(AccountType.SAVINGS);

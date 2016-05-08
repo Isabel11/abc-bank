@@ -1,6 +1,7 @@
 package com.abc.bank;
 
 import com.abc.customer.Customer;
+import com.abc.customer.ICustomer;
 
 /**
  * TODO Isabel improve description
@@ -48,6 +49,6 @@ public interface IBank {
 	 * @throws NoCustomerException
 	 *             if the bank has no customers.
 	 */
-	Customer getFirstCustomer() throws NoCustomerException;
+	ICustomer getFirstCustomer() throws NoCustomerException;
 
 }

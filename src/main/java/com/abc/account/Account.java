@@ -1,8 +1,8 @@
 package com.abc.account;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import com.abc.account.transaction.ITransaction;
 import com.abc.account.transaction.Transaction;
 
 /**
@@ -10,14 +10,15 @@ import com.abc.account.transaction.Transaction;
  * @author Isabel Peters (isabel.rlpeters@googlemail.com)
  *
  */
-public abstract class AbstractAccount implements IAccount {
+public abstract class Account implements IAccount {
 
 	private final AccountType accountType;
-	public List<Transaction> transactions;
 
-	public AbstractAccount(AccountType accountType) {
+	private final TransactionRepository transactions;
+
+	public Account(AccountType accountType) {
 		this.accountType = accountType;
-		this.transactions = new ArrayList<Transaction>();
+		this.transactions = new TransactionRepository();
 	}
 
 	@Override
@@ -25,7 +26,7 @@ public abstract class AbstractAccount implements IAccount {
 		if (amount <= 0) {
 			throw new IllegalArgumentException("amount must be greater than zero");
 		} else {
-			transactions.add(new Transaction(amount));
+			transactions.addTransaction(new Transaction(amount));
 		}
 	}
 
@@ -34,7 +35,8 @@ public abstract class AbstractAccount implements IAccount {
 		if (amount <= 0) {
 			throw new IllegalArgumentException("amount must be greater than zero");
 		} else {
-			transactions.add(new Transaction(-amount));
+			// TODO Isabel
+			transactions.addTransaction(new Transaction(-amount));
 		}
 	}
 
@@ -43,16 +45,22 @@ public abstract class AbstractAccount implements IAccount {
 		return checkIfTransactionsExist(true);
 	}
 
+	// TODO Isabel
 	private double checkIfTransactionsExist(boolean checkAll) {
 		double amount = 0.0;
-		for (Transaction t : transactions)
-			amount += t.amount;
+		for (ITransaction transactions : transactions.getAllTransactions())
+			amount += transactions.getAmount();
 		return amount;
 	}
 
 	@Override
 	public AccountType getAccountType() {
 		return accountType;
+	}
+
+	@Override
+	public List<ITransaction> getTransactions() {
+		return transactions.getAllTransactions();
 	}
 
 }

@@ -1,6 +1,6 @@
 package com.abc.customer;
 
-import com.abc.account.AbstractAccount;
+import com.abc.account.Account;
 import com.abc.account.AccountType;
 
 /**
@@ -25,7 +25,7 @@ public interface ICustomer {
 	 * @throws OpenAccountException
 	 *             If opening of the account failed.
 	 */
-	AbstractAccount openAccount(AccountType accountType) throws OpenAccountException;
+	Account openAccount(AccountType accountType) throws OpenAccountException;
 
 	/**
 	 * @return The number of the accounts the customer currently holds.

@@ -3,8 +3,9 @@ package com.abc.customer;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.abc.account.AbstractAccount;
+import com.abc.account.Account;
 import com.abc.account.AccountType;
+import com.abc.account.IAccount;
 import com.abc.account.statement.AccountStatementGenerator;
 
 /**
@@ -16,11 +17,11 @@ public class Customer implements ICustomer {
 
 	// TODO Isabel probably want to add a UUID
 
-	private String name;
+	private final String name;
 
-	private List<AbstractAccount> accounts;
+	private final List<IAccount> accounts;
 
-	public Customer(String name) {
+	public Customer(final String name) {
 		this.name = name;
 		this.accounts = new ArrayList<>();
 	}
@@ -31,7 +32,7 @@ public class Customer implements ICustomer {
 	}
 
 	@Override
-	public AbstractAccount openAccount(AccountType accountType) throws OpenAccountException {
+	public Account openAccount(AccountType accountType) throws OpenAccountException {
 		// TODO implement
 		return null;
 	}
@@ -45,7 +46,7 @@ public class Customer implements ICustomer {
 	public double totalInterestEarned() {
 		double totalInterests = 0;
 
-		for (AbstractAccount account : accounts)
+		for (IAccount account : accounts)
 			totalInterests += account.interestEarned();
 
 		return totalInterests;

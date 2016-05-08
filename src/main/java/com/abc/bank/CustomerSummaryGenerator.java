@@ -1,6 +1,6 @@
 package com.abc.bank;
 
-import com.abc.customer.Customer;
+import com.abc.customer.ICustomer;
 
 /**
  * Generator for customer summaries.
@@ -32,7 +32,7 @@ public class CustomerSummaryGenerator {
 		StringBuilder builder = new StringBuilder();
 		builder.append(TITLE);
 
-		for (Customer customer : customerRepository.getAllCustomers()) {
+		for (ICustomer customer : customerRepository.getAllCustomers()) {
 			builder.append("\n");
 			builder.append(customer.getName());
 			builder.append(" (");
@@ -43,7 +43,7 @@ public class CustomerSummaryGenerator {
 		return builder.toString();
 	}
 
-	private static void appendNumberOfAccounts(StringBuilder builder, Customer customer) {
+	private static void appendNumberOfAccounts(StringBuilder builder, ICustomer customer) {
 		if (customer.getNumberOfAccounts() == 1) {
 			builder.append("1 account");
 		} else {

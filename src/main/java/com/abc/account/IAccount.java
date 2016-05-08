@@ -1,5 +1,9 @@
 package com.abc.account;
 
+import java.util.List;
+
+import com.abc.account.transaction.ITransaction;
+
 /**
  * 
  * @author Isabel Peters (isabel.rlpeters@googlemail.com)
@@ -16,4 +20,6 @@ public interface IAccount {
 	double sumTransactions();
 
 	AccountType getAccountType();
+
+	List<ITransaction> getTransactions();
 }

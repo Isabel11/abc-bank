@@ -4,7 +4,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.abc.customer.Customer;
+import com.abc.customer.ICustomer;
 
 /**
  * Customer container for a bank.
@@ -14,13 +14,13 @@ import com.abc.customer.Customer;
  */
 public class CustomerRepository {
 
-	private List<Customer> customers;
+	private List<ICustomer> customers;
 
 	public CustomerRepository() {
 		customers = new LinkedList<>();
 	}
 
-	public boolean addCustomer(Customer customer) {
+	public boolean addCustomer(ICustomer customer) {
 		if (customer == null) {
 			return false;
 		}
@@ -35,11 +35,11 @@ public class CustomerRepository {
 		return customers.size() > 0;
 	}
 
-	public List<Customer> getAllCustomers() {
+	public List<ICustomer> getAllCustomers() {
 		return Collections.unmodifiableList(customers);
 	}
 
-	public Customer getFirstCustomer() throws NoCustomerException {
+	public ICustomer getFirstCustomer() throws NoCustomerException {
 		if (customers.size() > 0) {
 			return customers.get(0);
 		} else {

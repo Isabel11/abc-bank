@@ -4,8 +4,8 @@ import static java.lang.Math.abs;
 
 import java.util.List;
 
-import com.abc.account.AbstractAccount;
-import com.abc.account.transaction.Transaction;
+import com.abc.account.IAccount;
+import com.abc.account.transaction.ITransaction;
 import com.abc.customer.Customer;
 
 /**
@@ -25,12 +25,12 @@ public class AccountStatementGenerator {
 	 *            The list of accounts to generate the statement for.
 	 * @return A full statement of all accounts.
 	 */
-	public static String generateForAllAccounts(final Customer customer, final List<AbstractAccount> accounts) {
+	public static String generateForAllAccounts(final Customer customer, final List<IAccount> accounts) {
 		final StringBuilder builder = new StringBuilder();
 		builder.append("Statement for " + customer.getName() + "\n");
 
 		double total = 0.0;
-		for (AbstractAccount account : accounts) {
+		for (IAccount account : accounts) {
 			builder.append("\n");
 			appendStatementForAccount(builder, account);
 			builder.append("\n");
@@ -42,17 +42,17 @@ public class AccountStatementGenerator {
 		return builder.toString();
 	}
 
-	private static String appendStatementForAccount(final StringBuilder builder, final AbstractAccount account) {
+	private static String appendStatementForAccount(final StringBuilder builder, final IAccount account) {
 		builder.append(account.getAccountType().toString());
 
 		double totalTransactions = 0.0;
-		for (Transaction transaction : account.transactions) {
+		for (ITransaction transaction : account.getTransactions()) {
 			builder.append("\t");
-			builder.append(transaction.amount < 0 ? "withdrawal" : "deposit");
+			builder.append(transaction.getAmount() < 0 ? "withdrawal" : "deposit");
 			builder.append(" ");
-			builder.append(toDollars(transaction.amount));
+			builder.append(toDollars(transaction.getAmount()));
 			builder.append("\n");
-			totalTransactions += transaction.amount;
+			totalTransactions += transaction.getAmount();
 		}
 
 		builder.append("Total " + toDollars(totalTransactions));
@@ -61,7 +61,7 @@ public class AccountStatementGenerator {
 	}
 
 	private static String toDollars(double d) {
-		// TODO abs ??
+		// TODO Isabel abs ??
 		return String.format("$%,.2f", abs(d));
 	}
 

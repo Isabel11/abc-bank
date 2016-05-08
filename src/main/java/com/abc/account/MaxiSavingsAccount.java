@@ -5,7 +5,7 @@ package com.abc.account;
  * @author Isabel Peters (isabel.rlpeters@googlemail.com)
  *
  */
-public class MaxiSavingsAccount extends AbstractAccount {
+public class MaxiSavingsAccount extends Account {
 
 	public MaxiSavingsAccount() {
 		super(AccountType.MAXI_SAVINGS);

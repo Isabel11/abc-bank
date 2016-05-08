@@ -3,6 +3,7 @@ package com.abc.bank;
 import java.util.logging.Level;
 
 import com.abc.customer.Customer;
+import com.abc.customer.ICustomer;
 import com.sun.istack.internal.logging.Logger;
 
 /**
@@ -46,13 +47,13 @@ public class Bank implements IBank {
 	@Override
 	public double totalInterestPaid() {
 		double total = 0;
-		for (Customer c : customerRepository.getAllCustomers())
+		for (ICustomer c : customerRepository.getAllCustomers())
 			total += c.totalInterestEarned();
 		return total;
 	}
 
 	@Override
-	public Customer getFirstCustomer() throws NoCustomerException {
+	public ICustomer getFirstCustomer() throws NoCustomerException {
 		try {
 			return customerRepository.getFirstCustomer();
 		} catch (NoCustomerException e) {

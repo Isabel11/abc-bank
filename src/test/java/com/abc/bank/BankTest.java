@@ -13,6 +13,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.abc.customer.Customer;
+import com.abc.customer.ICustomer;
 
 /**
  * Tests the behaviour of the bank.
@@ -101,8 +102,8 @@ public class BankTest {
 	private int expectedNumberOfCustomers;
 	private boolean returnedAddCustomerResult;
 	private String returnedCustomerSummary;
-	private Customer expectedFirstCustomer;
-	private Customer returnedFirstCustomer;
+	private ICustomer expectedFirstCustomer;
+	private ICustomer returnedFirstCustomer;
 
 	@Before
 	public void setUp() {
