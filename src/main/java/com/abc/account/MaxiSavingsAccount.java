@@ -17,4 +17,6 @@ public class MaxiSavingsAccount extends AbstractAccount {
 		return 0;
 	}
 
+	// TODO Isabel guava equals hashcode etc
+
 }

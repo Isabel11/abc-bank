@@ -40,6 +40,6 @@ public interface IBank {
 	/**
 	 * @return The first {@link Customer} added to this bank.
 	 */
-	Customer getFirstCustomer();
+	Customer getFirstCustomer() throws NoCustomerException;
 
 }

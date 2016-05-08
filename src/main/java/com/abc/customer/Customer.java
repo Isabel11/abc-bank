@@ -56,4 +56,6 @@ public class Customer implements ICustomer {
 		return AccountStatementGenerator.generateForAllAccounts(this, accounts);
 	}
 
+	// TODO Isabel guava equals hashcode etc
+
 }

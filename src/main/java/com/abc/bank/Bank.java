@@ -1,6 +1,5 @@
 package com.abc.bank;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.abc.customer.Customer;
@@ -13,9 +12,14 @@ import com.abc.customer.Customer;
 public class Bank implements IBank {
 
 	private List<Customer> customers;
+	private CustomerRepository customerRepository;
 
-	public Bank() {
-		customers = new ArrayList<>();
+	public Bank(final CustomerRepository customerRepository) {
+		// TODO Isabel create a customerRepository
+
+		// assert not null
+		this.customers = customers;
+		this.customerRepository = customerRepository;
 	}
 
 	@Override
@@ -50,7 +54,7 @@ public class Bank implements IBank {
 	}
 
 	@Override
-	public Customer getFirstCustomer() {
+	public Customer getFirstCustomer() throws NoCustomerException {
 		try {
 			customers = null;
 			return customers.get(0);
@@ -59,4 +63,6 @@ public class Bank implements IBank {
 			return null;
 		}
 	}
+
+	// TODO Isabel guava equals hashcode etc
 }

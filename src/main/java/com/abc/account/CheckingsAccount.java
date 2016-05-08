@@ -17,4 +17,5 @@ public class CheckingsAccount extends AbstractAccount {
 		return 0;
 	}
 
+	// TODO Isabel guava equals hashcode etc
 }
