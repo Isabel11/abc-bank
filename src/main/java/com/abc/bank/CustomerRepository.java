@@ -1,10 +1,17 @@
 package com.abc.bank;
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
 import com.abc.customer.Customer;
 
+/**
+ * Customer container for a bank.
+ * 
+ * @author Isabel Peters (isabel.rlpeters@googlemail.com)
+ *
+ */
 public class CustomerRepository {
 
 	private List<Customer> customers;
@@ -22,6 +29,10 @@ public class CustomerRepository {
 
 	public int getNumberOfCustomers() {
 		return customers.size();
+	}
+
+	public List<Customer> getAllCustomers() {
+		return Collections.unmodifiableList(customers);
 	}
 
 }

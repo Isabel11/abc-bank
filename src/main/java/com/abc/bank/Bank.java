@@ -1,37 +1,32 @@
 package com.abc.bank;
 
-import java.util.List;
-
 import com.abc.customer.Customer;
 
 /**
+ * Representation of a concrete bank that implements the behaviour of the
+ * interface {@link IBank}.
  * 
  * @author Isabel Peters (isabel.rlpeters@googlemail.com)
  *
  */
 public class Bank implements IBank {
 
-	private List<Customer> customers;
 	private CustomerRepository customerRepository;
 
 	public Bank(final CustomerRepository customerRepository) {
-		// TODO Isabel create a customerRepository
-
-		// assert not null
-		this.customers = customers;
+		// TODO Isabel assert not null
 		this.customerRepository = customerRepository;
 	}
 
 	@Override
 	public boolean addCustomer(Customer customer) {
-		customers.add(customer);
-		return false;
+		return customerRepository.addCustomer(customer);
 	}
 
 	@Override
 	public String customerSummary() {
 		String summary = "Customer Summary";
-		for (Customer c : customers)
+		for (Customer c : customerRepository.getAllCustomers())
 			summary += "\n - " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")";
 		return summary;
 	}
@@ -48,7 +43,7 @@ public class Bank implements IBank {
 	@Override
 	public double totalInterestPaid() {
 		double total = 0;
-		for (Customer c : customers)
+		for (Customer c : customerRepository.getAllCustomers())
 			total += c.totalInterestEarned();
 		return total;
 	}
@@ -56,8 +51,9 @@ public class Bank implements IBank {
 	@Override
 	public Customer getFirstCustomer() throws NoCustomerException {
 		try {
-			customers = null;
-			return customers.get(0);
+			return null;
+			// customers = null;
+			// return customers.get(0);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
