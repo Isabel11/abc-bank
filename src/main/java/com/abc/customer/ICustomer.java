@@ -50,4 +50,19 @@ public interface ICustomer {
 	 * @return A statement including all accounts;
 	 */
 	String getStatement();
+
+	/**
+	 * Transfers a given amount of money from one type of {@link IAccount} to a
+	 * different type of {@link IAccount}.
+	 *
+	 * @param from
+	 *            The {@link Account} to transfer the money from.
+	 * @param to
+	 *            The {@link Account} to transfer the money to.
+	 * @param amount
+	 *            The amount as a {@link BigDecimal} in USD.
+	 * @return <code>true</code> if transfer was successful <code>false</code>
+	 *         otherwise.
+	 */
+	boolean transfer(IAccount from, IAccount to, BigDecimal amount);
 }

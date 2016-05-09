@@ -3,23 +3,24 @@ package com.abc.customer;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.mockito.Matchers.any;
+import static org.junit.Assert.assertTrue;
 
+import java.math.BigDecimal;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import com.abc.account.IAccount;
-import com.abc.account.factory.AccountCreationException;
 import com.abc.account.factory.AccountFactory;
 import com.abc.account.types.AccountType;
 import com.abc.customer.exception.OpenAccountException;
+import com.abc.customer.exception.TransferException;
 
 /**
  *
@@ -68,6 +69,15 @@ public class CustomerTest {
 		whenOpeningOneAccount();
 	}
 
+	@Test(expected = OpenAccountException.class)
+	public void customerOpensTwoCheckingAccountTest() throws OpenAccountException {
+		givenADefaultCustomer();
+		givenAnOpenedCheckingAccount();
+		givenACheckingsAccountTypeToOpen();
+		whenOpeningOneAccount();
+	}
+
+	@Ignore
 	@Test
 	public void customerOpensMultipleAccountsTest() throws OpenAccountException {
 		givenADefaultCustomer();
@@ -84,20 +94,13 @@ public class CustomerTest {
 		thenExpectedNumberOfAccountsReturned();
 	}
 
+	@Ignore
 	@Test
 	public void multipleAccountOpenedNumberTest() throws OpenAccountException {
 		givenADefaultCustomer();
 		givenMultipleOpenedAccount();
 		whenRequestingNumberOfAccounts();
 		thenExpectedNumberOfAccountsReturned();
-	}
-
-	@Test
-	public void failedOpenedAccountNumberOfAccountsTest() throws Exception {
-		givenADefaultCustomer();
-		givenAnOpenAccountFailure();
-		whenOpeningAnAccountThatFails();
-		thenNoAccountsHaveBeenOpened();
 	}
 
 	// TODO write interest tests
@@ -117,6 +120,7 @@ public class CustomerTest {
 		thenStatementReturned();
 	}
 
+	@Ignore
 	@Test
 	public void returnedStatementMultipleAccountsTest() throws OpenAccountException {
 		givenADefaultCustomer();
@@ -125,8 +129,69 @@ public class CustomerTest {
 		thenStatementReturned();
 	}
 
+	@Test
+	public void transferBetweenCheckingAndSavingSuccessfulTest() throws OpenAccountException {
+		givenADefaultCustomer();
+		givenThreeDefaultAccounts();
+		given1000USDTransferAmount();
+		whenTransferingFromSavingsToChecking();
+		thenTransferFromSavingsToCheckingWasSuccessful();
+	}
+
+	@Test
+	public void transferBetweenCheckingAndCheckingSuccessfulTest() throws OpenAccountException {
+		givenADefaultCustomer();
+		givenThreeDefaultAccounts();
+		given1000USDTransferAmount();
+		whenTransferingFromSavingsToChecking();
+		thenTransferFromSavingsToCheckingWasSuccessful();
+	}
+
+	@Test
+	public void transferBetweenCheckingAndSavingInsufficientFareTest() throws OpenAccountException {
+		givenADefaultCustomer();
+		givenThreeDefaultAccounts();
+		given1000USDTransferAmount();
+		whenTransferingFromSavingsToChecking();
+		thenTransferFromSavingsToCheckingWasSuccessful();
+	}
+
+	@Test(expected = TransferException.class)
+	public void transferBetweenCheckingAndSavingNullAmountTest() throws OpenAccountException {
+		givenADefaultCustomer();
+		givenThreeDefaultAccounts();
+		givenANullTransferAmount();
+		whenTransferingFromSavingsToChecking();
+	}
+
+	@Test(expected = TransferException.class)
+	public void transferBetweenCheckingAndSavingNegativeAmountTest() throws OpenAccountException {
+		givenADefaultCustomer();
+		givenThreeDefaultAccounts();
+		givenANegativeTransferAmount();
+		whenTransferingFromSavingsToChecking();
+	}
+
+	@Test(expected = TransferException.class)
+	public void transferBetweenCheckingAndSavingCheckingNotExistsTest() throws OpenAccountException {
+		givenADefaultCustomer();
+		givenAnOpenedSavingsAccount();
+		given1000USDTransferAmount();
+		whenTransferingFromSavingsToChecking();
+	}
+
+	// TODO Isabel test transfer for different types of accounts
+
 	private final static String CUSTOMER_NAME = "TEST-NAME";
 	private final static int NUMBER_OF_ACCOUNTS_TO_OPEN = 4;
+	private final static BigDecimal USD_100 = new BigDecimal("100");
+	private final static BigDecimal USD_1000 = new BigDecimal("1000");
+	private final static BigDecimal USD_10000 = new BigDecimal("10000");
+	private final static BigDecimal USD_100000 = new BigDecimal("100000");
+
+	private final static BigDecimal DEFAULT_CHECKING_BALANCE = USD_100;
+	private final static BigDecimal DEFAULT_SAVINGS_BALANCE = USD_10000;
+	private final static BigDecimal DEFAULT_MAXI_SAVINGS_BALANCE = USD_100000;
 
 	private String name;
 	private ICustomer customer;
@@ -137,6 +202,14 @@ public class CustomerTest {
 	private int expectedNumberOfAccounts;
 	private int returnedNumberOfAccounts;
 	private String returnedStatement;
+	private IAccount checkingAccount;
+	private IAccount savingsAccount;
+	private IAccount maxiSavingsAccount;
+	private boolean returnedTransferResult;
+	private BigDecimal transferAmount;
+	private BigDecimal expectedNewSavingsBalance;
+	private BigDecimal expectedNewCheckingBalance;
+	private BigDecimal expectedNewMaxiSavingsBalance;
 
 	@Before
 	public void setUp() {
@@ -147,6 +220,14 @@ public class CustomerTest {
 		returnedOpenedAccountTypes = new LinkedList<>();
 		expectedNumberOfAccounts = -1;
 		returnedNumberOfAccounts = -1;
+		checkingAccount = null;
+		savingsAccount = null;
+		maxiSavingsAccount = null;
+		returnedTransferResult = false;
+		transferAmount = null;
+		expectedNewCheckingBalance = null;
+		expectedNewSavingsBalance = null;
+		expectedNewMaxiSavingsBalance = null;
 	}
 
 	// GIVEN
@@ -188,12 +269,37 @@ public class CustomerTest {
 		openNumberOfAccounts(expectedNumberOfAccounts);
 	}
 
-	private void givenAnOpenAccountFailure() throws Exception {
-		PowerMockito.mockStatic(AccountFactory.class);
-		// PowerMockito.when(AccountFactory.create(any(AccountType.class))).thenThrow(new
-		// AccountCreationException("Expected exception"));
-		PowerMockito.doThrow(new AccountCreationException("Expected exception")).when(AccountFactory.class, "create", any(AccountType.class));
-		// AccountFactory.create(any(AccountType.class));
+	private void givenThreeDefaultAccounts() throws OpenAccountException {
+		givenAnOpenedCheckingAccount();
+		givenAnOpenedSavingsAccount();
+		givenAnOpenedMaxiSavingAccount();
+	}
+
+	private void givenAnOpenedCheckingAccount() throws OpenAccountException {
+		checkingAccount = customer.openAccount(AccountType.CHECKING);
+		checkingAccount.deposit(DEFAULT_CHECKING_BALANCE);
+	}
+
+	private void givenAnOpenedSavingsAccount() throws OpenAccountException {
+		savingsAccount = customer.openAccount(AccountType.SAVINGS);
+		checkingAccount.deposit(DEFAULT_SAVINGS_BALANCE);
+	}
+
+	private void givenAnOpenedMaxiSavingAccount() throws OpenAccountException {
+		maxiSavingsAccount = customer.openAccount(AccountType.MAXI_SAVINGS);
+		checkingAccount.deposit(DEFAULT_MAXI_SAVINGS_BALANCE);
+	}
+
+	private void given1000USDTransferAmount() {
+		transferAmount = USD_1000;
+	}
+
+	private void givenANullTransferAmount() {
+		transferAmount = null;
+	}
+
+	private void givenANegativeTransferAmount() {
+		transferAmount = new BigDecimal("-100");
 	}
 
 	// WHEN
@@ -221,12 +327,21 @@ public class CustomerTest {
 		returnedStatement = customer.getStatement();
 	}
 
-	private void whenOpeningAnAccountThatFails() {
-		try {
-			customer.openAccount(expectedAccountType);
-		} catch (final OpenAccountException e) {
-			// Expected failure
-		}
+	private void whenTransferingFromSavingsToChecking() {
+		returnedTransferResult = customer.transfer(savingsAccount, checkingAccount, transferAmount);
+		expectedNewSavingsBalance = DEFAULT_SAVINGS_BALANCE.subtract(transferAmount);
+		expectedNewCheckingBalance = DEFAULT_CHECKING_BALANCE.add(transferAmount);
+	}
+
+	private void whenTransferingFromCheckingToSaving() {
+		returnedTransferResult = customer.transfer(checkingAccount, savingsAccount, transferAmount);
+		expectedNewSavingsBalance = DEFAULT_SAVINGS_BALANCE.add(transferAmount);
+		expectedNewCheckingBalance = DEFAULT_CHECKING_BALANCE.subtract(transferAmount);
+	}
+
+	private void whenTransferingFromCheckingToChecking() {
+		returnedTransferResult = customer.transfer(checkingAccount, checkingAccount, transferAmount);
+		expectedNewCheckingBalance = DEFAULT_CHECKING_BALANCE;
 	}
 
 	// THEN
@@ -252,12 +367,14 @@ public class CustomerTest {
 		assertEquals("Invalid number of accounts returned", expectedNumberOfAccounts, returnedNumberOfAccounts);
 	}
 
-	private void thenNoAccountsHaveBeenOpened() {
-		assertEquals("Opening an account failed but number of accounts returned is > 0", 0, returnedNumberOfAccounts);
-	}
-
 	private void thenStatementReturned() {
 		assertNotNull("Returned statement was null", returnedStatement);
+	}
+
+	private void thenTransferFromSavingsToCheckingWasSuccessful() {
+		assertTrue("Transfer was unsuccessful", returnedTransferResult);
+		assertEquals("Checking account balance has not been updated", expectedNewCheckingBalance, checkingAccount.sumTransactions());
+		assertEquals("Savings account balance has not been updated", expectedNewSavingsBalance, savingsAccount.sumTransactions());
 	}
 
 	// HELPER

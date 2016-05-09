@@ -35,8 +35,14 @@ public class Customer implements ICustomer {
 		return name;
 	}
 
+	/*
+	 * For the additional tasks I am making the following assumptions (to be
+	 * discussed): A customer can have only one account for each type.
+	 */
 	@Override
 	public IAccount openAccount(final AccountType accountType) throws OpenAccountException {
+		validateAccount(accountType);
+
 		IAccount newAccount;
 		try {
 			newAccount = AccountFactory.create(accountType);
@@ -45,6 +51,14 @@ public class Customer implements ICustomer {
 			throw new OpenAccountException("Failed to open new account of type " + accountType, e);
 		}
 		return newAccount;
+	}
+
+	private void validateAccount(final AccountType accountType) throws OpenAccountException {
+		if (accountType == null) {
+			throw new OpenAccountException("Account type must not be null");
+		} else if (accounts.hasTypeOfAccount(accountType)) {
+			throw new OpenAccountException("An account of account type " + accountType.toString() + " exists already.");
+		}
 	}
 
 	@Override
@@ -66,6 +80,12 @@ public class Customer implements ICustomer {
 	@Override
 	public String getStatement() {
 		return AccountStatementGenerator.generateForAllAccounts(this, accounts.getAllAccounts());
+	}
+
+	@Override
+	public boolean transfer(final IAccount from, final IAccount to, final BigDecimal amount) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 	@Override

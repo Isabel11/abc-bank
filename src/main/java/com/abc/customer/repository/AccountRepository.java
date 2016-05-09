@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.abc.account.IAccount;
+import com.abc.account.types.AccountType;
 
 /**
  * Account repository for a customer.
@@ -24,7 +25,6 @@ public class AccountRepository {
 		if (account == null) {
 			return false;
 		}
-		// TODO Isabel check if account exists already
 		return accounts.add(account);
 	}
 
@@ -34,6 +34,14 @@ public class AccountRepository {
 
 	public synchronized int size() {
 		return accounts.size();
+	}
+
+	public boolean hasTypeOfAccount(final AccountType type) {
+		final long numberOfAccountsOfType = accounts.stream()//
+				.filter(account -> account.getAccountType().equals(type))//
+				.count();
+
+		return numberOfAccountsOfType > 0;
 	}
 
 }
