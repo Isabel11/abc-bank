@@ -9,6 +9,8 @@ import com.abc.account.IAccount;
 import com.abc.account.statement.AccountStatementGenerator;
 import com.abc.account.types.AccountType;
 import com.abc.customer.exception.OpenAccountException;
+import com.google.common.base.MoreObjects;
+import com.google.common.base.Objects;
 
 /**
  * Representation of a bank customer.
@@ -48,8 +50,9 @@ public class Customer implements ICustomer {
 	public BigDecimal totalInterestEarned() {
 		BigDecimal totalInterests = BigDecimal.ZERO;
 
-		for (IAccount account : accounts)
+		for (IAccount account : accounts) {
 			totalInterests = totalInterests.add(account.interestEarned());
+		}
 
 		return totalInterests;
 	}
@@ -59,42 +62,24 @@ public class Customer implements ICustomer {
 		return AccountStatementGenerator.generateForAllAccounts(this, accounts);
 	}
 
-	// TODO Isabel guava equals hashcode etc
-
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((accounts == null) ? 0 : accounts.hashCode());
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		return result;
+		return Objects.hashCode(this.name, this.accounts);
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
 		if (obj == null)
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Customer other = (Customer) obj;
-		if (accounts == null) {
-			if (other.accounts != null)
-				return false;
-		} else if (!accounts.equals(other.accounts))
-			return false;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		return true;
+		final Customer other = (Customer) obj;
+		return Objects.equal(this.name, other.name) && Objects.equal(this.accounts, other.accounts);
 	}
 
 	@Override
 	public String toString() {
-		return "Customer [name=" + name + ", accounts=" + accounts + "]";
+		return MoreObjects.toStringHelper(this).add("name", name).add("accounts", accounts).toString();
 	}
 
 }

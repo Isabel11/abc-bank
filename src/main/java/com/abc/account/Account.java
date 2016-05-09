@@ -36,14 +36,23 @@ public abstract class Account implements IAccount {
 	public ITransaction withdraw(BigDecimal amount) {
 		validateAmount(amount);
 		BigDecimal negativeAmount = amount.multiply(BigDecimal.valueOf(-1));
-		transactions.addTransaction(new Transaction.SuccessfulTransaction(negativeAmount, null));
 
-		return null;
+		if (amount.compareTo(sumTransactions()) > 0) {
+			return new Transaction.FailedTransaction(negativeAmount, null);
+		}
+
+		ITransaction withdrawlTransaction = new Transaction.SuccessfulTransaction(negativeAmount, null);
+		transactions.addTransaction(withdrawlTransaction);
+
+		return withdrawlTransaction;
 	}
 
 	private void validateAmount(BigDecimal amount) {
-		if (amount.compareTo(BigDecimal.ZERO) == 0 || amount.compareTo(BigDecimal.ZERO) < 0) {
-			throw new IllegalArgumentException("amount must be greater than zero");
+		if (amount == null) {
+			throw new IllegalArgumentException("Amount to withdraw or deposit must not be null");
+		}
+		if (amount.compareTo(BigDecimal.ZERO) <= 0) {
+			throw new IllegalArgumentException("Amount to withdraw or deposit must be greater than zero");
 		}
 	}
 
@@ -55,8 +64,9 @@ public abstract class Account implements IAccount {
 	// TODO Isabel
 	private BigDecimal checkIfTransactionsExist(boolean checkAll) {
 		BigDecimal amount = BigDecimal.ZERO;
-		for (ITransaction transactions : transactions.getAllTransactions())
+		for (ITransaction transactions : transactions.getAllTransactions()) {
 			amount = amount.add(transactions.getAmount());
+		}
 		return amount;
 	}
 

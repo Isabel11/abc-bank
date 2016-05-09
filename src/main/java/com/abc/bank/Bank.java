@@ -2,12 +2,14 @@ package com.abc.bank;
 
 import java.math.BigDecimal;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.abc.bank.exception.NoCustomerException;
 import com.abc.bank.repository.CustomerRepository;
 import com.abc.customer.Customer;
 import com.abc.customer.ICustomer;
-import com.sun.istack.internal.logging.Logger;
+import com.google.common.base.MoreObjects;
+import com.google.common.base.Objects;
 
 /**
  * Representation of a concrete bank that implements the behaviour of the
@@ -18,7 +20,7 @@ import com.sun.istack.internal.logging.Logger;
  */
 public class Bank implements IBank {
 
-	private final static Logger LOGGER = Logger.getLogger(Bank.class);
+	private final static Logger LOGGER = Logger.getLogger(Bank.class.getName());
 
 	private final String name;
 
@@ -28,8 +30,8 @@ public class Bank implements IBank {
 		this(new CustomerRepository(), name);
 	}
 
+	// TODO Isabel use @NotNull
 	public Bank(final CustomerRepository customerRepository, String name) {
-		// TODO Isabel assert not null
 		this.name = name;
 		this.customerRepository = customerRepository;
 	}
@@ -50,8 +52,9 @@ public class Bank implements IBank {
 	@Override
 	public BigDecimal totalInterestPaid() {
 		BigDecimal total = BigDecimal.ZERO;
-		for (ICustomer c : customerRepository.getAllCustomers())
-			total = total.add(c.totalInterestEarned());
+		for (ICustomer customer : customerRepository.getAllCustomers()) {
+			total = total.add(customer.totalInterestEarned());
+		}
 		return total;
 	}
 
@@ -67,34 +70,25 @@ public class Bank implements IBank {
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((customerRepository == null) ? 0 : customerRepository.hashCode());
-		return result;
+		return Objects.hashCode(this.name, this.customerRepository);
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
 		if (obj == null)
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Bank other = (Bank) obj;
-		if (customerRepository == null) {
-			if (other.customerRepository != null)
-				return false;
-		} else if (!customerRepository.equals(other.customerRepository))
-			return false;
-		return true;
+		final Bank other = (Bank) obj;
+		return Objects.equal(this.name, other.name) && //
+				Objects.equal(this.customerRepository, other.customerRepository);
 	}
 
 	@Override
 	public String toString() {
-		return "Bank [customerRepository=" + customerRepository + "]";
+		return MoreObjects.toStringHelper(this)//
+				.add("name", name)//
+				.add("customer repository", customerRepository)//
+				.toString();
 	}
-
-	// TODO Isabel guava equals hashcode etc
-
 }

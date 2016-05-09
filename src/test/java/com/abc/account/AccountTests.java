@@ -1,9 +1,9 @@
 package com.abc.account;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 import java.math.BigDecimal;
 import java.util.LinkedList;
@@ -78,19 +78,37 @@ public class AccountTests {
 		whenDepositingAnAmount();
 	}
 
-	@Test
-	public void withdrawSuccessfullyTest() {
-		fail();
+	@Test(expected = IllegalArgumentException.class)
+	public void depositNullAmountTest() throws AccountCreationException {
+		givenACheckingAccount();
+		givenANullAmountToDeposit();
+		whenDepositingAnAmount();
 	}
 
 	@Test
-	public void withdrawMoreMoneyThanAvailableTest() {
-		fail();
+	public void withdrawSuccessfullyTest() throws AccountCreationException {
+		givenACheckingAccount();
+		givenADefaultBalance();
+		givenMoneyToWithdraw();
+		whenWithdrawingSomeMoney();
+		thenWithdrawlWasSuccessful();
 	}
 
 	@Test
-	public void withdrawNegativeDollarsTest() {
-		fail();
+	public void withdrawMoreMoneyThanAvailableTest() throws AccountCreationException {
+		givenACheckingAccount();
+		givenADefaultBalance();
+		givenMoreMoneyToWithdrawThanBalance();
+		whenWithdrawingSomeMoney();
+		thenWithdrawlWasUnsuccessful();
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void withdrawNegativeDollarsTest() throws AccountCreationException {
+		givenACheckingAccount();
+		givenADefaultBalance();
+		givenANegativeAmountToWithdraw();
+		whenWithdrawingSomeMoney();
 	}
 
 	// TODO sum transactions
@@ -98,6 +116,7 @@ public class AccountTests {
 	// TODO interests
 
 	private final static BigDecimal ZERO_DOLLAR_SUM = BigDecimal.ZERO;
+	private final static BigDecimal DEFAULT_BALANCE_100_USD = BigDecimal.valueOf(100.0d);
 
 	private AccountType expectedAccountType;
 	private AccountType returnedAccountType;
@@ -108,6 +127,8 @@ public class AccountTests {
 	private BigDecimal expectedAccountBalance;
 	private BigDecimal[] amountsToDeposit;
 	private List<ITransaction> returnedDepositTransactions;
+	private ITransaction returnedWithdrawlTransaction;
+	private BigDecimal expectedAmountToWithdrawl;
 
 	@Before
 	public void setUp() {
@@ -120,6 +141,8 @@ public class AccountTests {
 		expectedAccountBalance = BigDecimal.ZERO;
 		amountsToDeposit = null;
 		returnedDepositTransactions = null;
+		returnedWithdrawlTransaction = null;
+		expectedAmountToWithdrawl = null;
 	}
 
 	// GIVEN
@@ -152,12 +175,33 @@ public class AccountTests {
 		expectedDepositedAmount = BigDecimal.valueOf(-5.0d);
 	}
 
+	private void givenANullAmountToDeposit() {
+		expectedDepositedAmount = null;
+	}
+
 	private void givenMultipleAmountsToDeposit() {
 		amountsToDeposit = new BigDecimal[10];
 		for (int i = 0; i < amountsToDeposit.length; i++) {
 			amountsToDeposit[i] = BigDecimal.valueOf(i + 1);
 			expectedAccountBalance = expectedAccountBalance.add(amountsToDeposit[i]);
 		}
+	}
+
+	private void givenADefaultBalance() {
+		account.deposit(DEFAULT_BALANCE_100_USD);
+		expectedAccountBalance = expectedAccountBalance.add(DEFAULT_BALANCE_100_USD);
+	}
+
+	private void givenMoneyToWithdraw() {
+		expectedAmountToWithdrawl = BigDecimal.valueOf(30.0d);
+	}
+
+	private void givenMoreMoneyToWithdrawThanBalance() {
+		expectedAmountToWithdrawl = BigDecimal.valueOf(300.0d);
+	}
+
+	private void givenANegativeAmountToWithdraw() {
+		expectedAmountToWithdrawl = BigDecimal.valueOf(-30.0d);
 	}
 
 	// WHEN
@@ -182,6 +226,13 @@ public class AccountTests {
 		}
 	}
 
+	private void whenWithdrawingSomeMoney() {
+		returnedWithdrawlTransaction = account.withdraw(expectedAmountToWithdrawl);
+		if (expectedAmountToWithdrawl.compareTo(expectedAccountBalance) <= 0) {
+			expectedAccountBalance = expectedAccountBalance.subtract(expectedAmountToWithdrawl);
+		}
+	}
+
 	// THEN
 	private void thenExpectedAccountTypeReturned() {
 		assertEquals("Invalid account type", expectedAccountType, returnedAccountType);
@@ -198,19 +249,26 @@ public class AccountTests {
 		assertEquals("Invalid account balance", expectedAccountBalance, account.sumTransactions());
 	}
 
-	private void thenDepositWasUnsuccessful() {
-		assertNotNull("Returned deposit transaction was null", returnedDepositTransaction);
-		// assertFalse("Deposit transaction was successful",
-		// returnedDepositTransaction.wasSuccessful());
-		assertEquals("Invalid account balance", expectedAccountBalance, account.sumTransactions());
-	}
-
 	private void thenMultipleAmountsDespositedSuccessfully() {
 		assertNotNull("Returned deposit transaction was null", returnedDepositTransactions);
 		assertEquals("Number of transactions is not the same as number of deposits", amountsToDeposit.length, returnedDepositTransactions.size());
 		for (ITransaction transaction : returnedDepositTransactions) {
 			assertTrue("Deposit transaction was not successful", transaction.wasSuccessful());
 		}
+		assertEquals("Invalid account balance", expectedAccountBalance, account.sumTransactions());
+	}
+
+	private void thenWithdrawlWasSuccessful() {
+		assertNotNull("Returned withdrawl transaction was null", returnedWithdrawlTransaction);
+		assertTrue("Withdrawl transaction was not successful", returnedWithdrawlTransaction.wasSuccessful());
+		assertEquals("Invalid withdrawl amount in returned transaction", expectedAmountToWithdrawl.multiply(BigDecimal.valueOf(-1)), returnedWithdrawlTransaction.getAmount());
+		assertEquals("Invalid account balance", expectedAccountBalance, account.sumTransactions());
+	}
+
+	private void thenWithdrawlWasUnsuccessful() {
+		assertNotNull("Returned withdrawl transaction was null", returnedWithdrawlTransaction);
+		assertFalse("Withdrawl transaction was not successful", returnedWithdrawlTransaction.wasSuccessful());
+		assertEquals("Invalid withdrawl amount in returned transaction", expectedAmountToWithdrawl.multiply(BigDecimal.valueOf(-1)), returnedWithdrawlTransaction.getAmount());
 		assertEquals("Invalid account balance", expectedAccountBalance, account.sumTransactions());
 	}
 
