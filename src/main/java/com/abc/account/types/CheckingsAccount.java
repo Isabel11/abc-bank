@@ -11,13 +11,15 @@ import com.abc.account.Account;
  */
 public class CheckingsAccount extends Account {
 
+	private static final BigDecimal CHECKING_ACCOUNT_DEFAULT_INTEREST = BigDecimal.valueOf(0.001d);
+
 	public CheckingsAccount() {
 		super(AccountType.CHECKING);
 	}
 
 	@Override
 	public BigDecimal interestEarned() {
-		// TODO Auto-generated method stub
-		return BigDecimal.ZERO;
+		final BigDecimal sumOfAllTransactions = sumTransactions();
+		return sumOfAllTransactions.multiply(CHECKING_ACCOUNT_DEFAULT_INTEREST);
 	}
 }
