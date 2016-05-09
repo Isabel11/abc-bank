@@ -11,12 +11,13 @@ import org.junit.Test;
 import com.abc.account.IAccount;
 import com.abc.account.factory.AccountCreationException;
 import com.abc.account.factory.AccountFactory;
+import com.abc.account.transaction.TransactionException;
 import com.abc.account.types.AccountType;
 
 public class SavingsAccountTest {
 
 	@Test
-	public void savingsAccInterestRates500USDTest() throws AccountCreationException {
+	public void savingsAccInterestRates500USDTest() throws AccountCreationException, TransactionException {
 		givenASavingsAccount();
 		given500USDToDeposit();
 		givenADeposit();
@@ -25,7 +26,7 @@ public class SavingsAccountTest {
 	}
 
 	@Test
-	public void savingsAccInterestRates1000USDTest() throws AccountCreationException {
+	public void savingsAccInterestRates1000USDTest() throws AccountCreationException, TransactionException {
 		givenASavingsAccount();
 		given1000USDToDeposit();
 		givenADeposit();
@@ -34,7 +35,7 @@ public class SavingsAccountTest {
 	}
 
 	@Test
-	public void savingsAccInterestRates1157USDTest() throws AccountCreationException {
+	public void savingsAccInterestRates1157USDTest() throws AccountCreationException, TransactionException {
 		givenASavingsAccount();
 		given1157USDToDeposit();
 		givenADeposit();
@@ -43,7 +44,7 @@ public class SavingsAccountTest {
 	}
 
 	@Test
-	public void savingsAccInterestRates1157And89USDTest() throws AccountCreationException {
+	public void savingsAccInterestRates1157And89USDTest() throws AccountCreationException, TransactionException {
 		givenASavingsAccount();
 		given1157And89USDToDeposit();
 		givenADeposit();
@@ -100,7 +101,7 @@ public class SavingsAccountTest {
 		expectedInterest = new BigDecimal("0");
 	}
 
-	private void givenADeposit() {
+	private void givenADeposit() throws TransactionException {
 		account.deposit(balance);
 	}
 

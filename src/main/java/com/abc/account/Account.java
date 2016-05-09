@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.abc.account.transaction.ITransaction;
 import com.abc.account.transaction.Transaction;
+import com.abc.account.transaction.TransactionException;
 import com.abc.account.transaction.TransactionRepository;
 import com.abc.account.types.AccountType;
 import com.google.common.base.MoreObjects;
@@ -27,7 +28,7 @@ public abstract class Account implements IAccount {
 	}
 
 	@Override
-	public ITransaction deposit(final BigDecimal amount) {
+	public ITransaction deposit(final BigDecimal amount) throws TransactionException {
 		validateAmount(amount);
 		final ITransaction successfulTransaction = new Transaction.SuccessfulTransaction(amount, null);
 		transactions.addTransaction(successfulTransaction);
@@ -35,7 +36,7 @@ public abstract class Account implements IAccount {
 	}
 
 	@Override
-	public ITransaction withdraw(final BigDecimal amount) {
+	public ITransaction withdraw(final BigDecimal amount) throws TransactionException {
 		validateAmount(amount);
 		final BigDecimal negativeAmount = amount.multiply(BigDecimal.valueOf(-1));
 
@@ -49,12 +50,12 @@ public abstract class Account implements IAccount {
 		return withdrawlTransaction;
 	}
 
-	private void validateAmount(final BigDecimal amount) {
+	private void validateAmount(final BigDecimal amount) throws TransactionException {
 		if (amount == null) {
-			throw new IllegalArgumentException("Amount to withdraw or deposit must not be null");
+			throw new TransactionException("Amount to withdraw or deposit must not be null");
 		}
 		if (amount.compareTo(BigDecimal.ZERO) <= 0) {
-			throw new IllegalArgumentException("Amount to withdraw or deposit must be greater than zero");
+			throw new TransactionException("Amount to withdraw or deposit must be greater than zero");
 		}
 	}
 

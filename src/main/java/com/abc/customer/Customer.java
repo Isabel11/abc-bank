@@ -8,6 +8,7 @@ import com.abc.account.factory.AccountFactory;
 import com.abc.account.statement.AccountStatementGenerator;
 import com.abc.account.types.AccountType;
 import com.abc.customer.exception.OpenAccountException;
+import com.abc.customer.exception.TransferException;
 import com.abc.customer.repository.AccountRepository;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
@@ -83,9 +84,24 @@ public class Customer implements ICustomer {
 	}
 
 	@Override
-	public boolean transfer(final IAccount from, final IAccount to, final BigDecimal amount) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean transfer(final IAccount from, final IAccount to, final BigDecimal amount) throws TransferException {
+		validateTransferParameters(from, to, amount);
+		return accounts.transfer(from, to, amount);
+	}
+
+	private void validateTransferParameters(final IAccount from, final IAccount to, final BigDecimal amount) throws TransferException {
+		if ((from == null) || !accounts.hasAccount(from)) {
+			throw new TransferException("Cannot do the transfer. From account is null or doesn't exist.");
+		}
+		if ((to == null) || !accounts.hasAccount(to)) {
+			throw new TransferException("Cannot do the transfer. To account is null or doesn't exist.");
+		}
+		if (amount == null) {
+			throw new TransferException("Cannot do the transfer. Amount is null.");
+		}
+		if (amount.compareTo(BigDecimal.ZERO) <= 0) {
+			throw new TransferException("Cannot do the transfer. Amount is less or equals to 0.");
+		}
 	}
 
 	@Override

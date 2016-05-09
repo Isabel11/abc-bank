@@ -6,6 +6,7 @@ import com.abc.account.Account;
 import com.abc.account.IAccount;
 import com.abc.account.types.AccountType;
 import com.abc.customer.exception.OpenAccountException;
+import com.abc.customer.exception.TransferException;
 
 /**
  *
@@ -64,5 +65,5 @@ public interface ICustomer {
 	 * @return <code>true</code> if transfer was successful <code>false</code>
 	 *         otherwise.
 	 */
-	boolean transfer(IAccount from, IAccount to, BigDecimal amount);
+	boolean transfer(IAccount from, IAccount to, BigDecimal amount) throws TransferException;
 }

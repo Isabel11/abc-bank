@@ -15,6 +15,7 @@ import org.junit.Test;
 import com.abc.account.factory.AccountCreationException;
 import com.abc.account.factory.AccountFactory;
 import com.abc.account.transaction.ITransaction;
+import com.abc.account.transaction.TransactionException;
 import com.abc.account.types.AccountType;
 
 public class AccountTests {
@@ -48,7 +49,7 @@ public class AccountTests {
 	}
 
 	@Test
-	public void depositAmountSuccessfullyTest() throws AccountCreationException {
+	public void depositAmountSuccessfullyTest() throws AccountCreationException, TransactionException {
 		givenACheckingAccount();
 		givenASmallAmountToDeposit();
 		whenDepositingAnAmount();
@@ -56,37 +57,37 @@ public class AccountTests {
 	}
 
 	@Test
-	public void depositMultipleAmountsSuccessfullyTest() throws AccountCreationException {
+	public void depositMultipleAmountsSuccessfullyTest() throws AccountCreationException, TransactionException {
 		givenACheckingAccount();
 		givenMultipleAmountsToDeposit();
 		whenDepositingMultipleAmounts();
 		thenMultipleAmountsDespositedSuccessfully();
 	}
 
-	@Test(expected = IllegalArgumentException.class)
-	public void depositZeroDollarsTest() throws AccountCreationException {
+	@Test(expected = TransactionException.class)
+	public void depositZeroDollarsTest() throws AccountCreationException, TransactionException {
 		givenACheckingAccount();
 		givenZeroAmountToDeposit();
 		whenDepositingAnAmount();
 		thenDepositWasSuccessful();
 	}
 
-	@Test(expected = IllegalArgumentException.class)
-	public void depositNegativeAmountTest() throws AccountCreationException {
+	@Test(expected = TransactionException.class)
+	public void depositNegativeAmountTest() throws AccountCreationException, TransactionException {
 		givenACheckingAccount();
 		givenANegativeAmountToDeposit();
 		whenDepositingAnAmount();
 	}
 
-	@Test(expected = IllegalArgumentException.class)
-	public void depositNullAmountTest() throws AccountCreationException {
+	@Test(expected = TransactionException.class)
+	public void depositNullAmountTest() throws AccountCreationException, TransactionException {
 		givenACheckingAccount();
 		givenANullAmountToDeposit();
 		whenDepositingAnAmount();
 	}
 
 	@Test
-	public void withdrawSuccessfullyTest() throws AccountCreationException {
+	public void withdrawSuccessfullyTest() throws AccountCreationException, TransactionException {
 		givenACheckingAccount();
 		givenADefaultBalance();
 		givenMoneyToWithdraw();
@@ -95,7 +96,7 @@ public class AccountTests {
 	}
 
 	@Test
-	public void withdrawMoreMoneyThanAvailableTest() throws AccountCreationException {
+	public void withdrawMoreMoneyThanAvailableTest() throws AccountCreationException, TransactionException {
 		givenACheckingAccount();
 		givenADefaultBalance();
 		givenMoreMoneyToWithdrawThanBalance();
@@ -103,8 +104,8 @@ public class AccountTests {
 		thenWithdrawlWasUnsuccessful();
 	}
 
-	@Test(expected = IllegalArgumentException.class)
-	public void withdrawNegativeDollarsTest() throws AccountCreationException {
+	@Test(expected = TransactionException.class)
+	public void withdrawNegativeDollarsTest() throws AccountCreationException, TransactionException {
 		givenACheckingAccount();
 		givenADefaultBalance();
 		givenANegativeAmountToWithdraw();
@@ -187,7 +188,7 @@ public class AccountTests {
 		}
 	}
 
-	private void givenADefaultBalance() {
+	private void givenADefaultBalance() throws TransactionException {
 		account.deposit(DEFAULT_BALANCE_100_USD);
 		expectedAccountBalance = expectedAccountBalance.add(DEFAULT_BALANCE_100_USD);
 	}
@@ -214,11 +215,11 @@ public class AccountTests {
 		returnedSumOfTransactions = account.sumTransactions();
 	}
 
-	private void whenDepositingAnAmount() {
+	private void whenDepositingAnAmount() throws TransactionException {
 		returnedDepositTransaction = account.deposit(expectedDepositedAmount);
 	}
 
-	private void whenDepositingMultipleAmounts() {
+	private void whenDepositingMultipleAmounts() throws TransactionException {
 		returnedDepositTransactions = new LinkedList<>();
 		for (int i = 0; i < amountsToDeposit.length; i++) {
 			returnedDepositTransactions.add(account.deposit(amountsToDeposit[i]));
@@ -226,7 +227,7 @@ public class AccountTests {
 		}
 	}
 
-	private void whenWithdrawingSomeMoney() {
+	private void whenWithdrawingSomeMoney() throws TransactionException {
 		returnedWithdrawlTransaction = account.withdraw(expectedAmountToWithdrawl);
 		if (expectedAmountToWithdrawl.compareTo(expectedAccountBalance) <= 0) {
 			expectedAccountBalance = expectedAccountBalance.subtract(expectedAmountToWithdrawl);
@@ -252,7 +253,7 @@ public class AccountTests {
 	private void thenMultipleAmountsDespositedSuccessfully() {
 		assertNotNull("Returned deposit transaction was null", returnedDepositTransactions);
 		assertEquals("Number of transactions is not the same as number of deposits", amountsToDeposit.length, returnedDepositTransactions.size());
-		for (ITransaction transaction : returnedDepositTransactions) {
+		for (final ITransaction transaction : returnedDepositTransactions) {
 			assertTrue("Deposit transaction was not successful", transaction.wasSuccessful());
 		}
 		assertEquals("Invalid account balance", expectedAccountBalance, account.sumTransactions());

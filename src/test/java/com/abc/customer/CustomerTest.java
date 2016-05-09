@@ -18,6 +18,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 import com.abc.account.IAccount;
 import com.abc.account.factory.AccountFactory;
+import com.abc.account.transaction.TransactionException;
 import com.abc.account.types.AccountType;
 import com.abc.customer.exception.OpenAccountException;
 import com.abc.customer.exception.TransferException;
@@ -70,7 +71,7 @@ public class CustomerTest {
 	}
 
 	@Test(expected = OpenAccountException.class)
-	public void customerOpensTwoCheckingAccountTest() throws OpenAccountException {
+	public void customerOpensTwoCheckingAccountTest() throws OpenAccountException, TransactionException {
 		givenADefaultCustomer();
 		givenAnOpenedCheckingAccount();
 		givenACheckingsAccountTypeToOpen();
@@ -130,7 +131,7 @@ public class CustomerTest {
 	}
 
 	@Test
-	public void transferBetweenCheckingAndSavingSuccessfulTest() throws OpenAccountException {
+	public void transferBetweenCheckingAndSavingSuccessfulTest() throws OpenAccountException, TransactionException, TransferException {
 		givenADefaultCustomer();
 		givenThreeDefaultAccounts();
 		given1000USDTransferAmount();
@@ -139,7 +140,7 @@ public class CustomerTest {
 	}
 
 	@Test
-	public void transferBetweenCheckingAndCheckingSuccessfulTest() throws OpenAccountException {
+	public void transferBetweenCheckingAndCheckingSuccessfulTest() throws OpenAccountException, TransactionException, TransferException {
 		givenADefaultCustomer();
 		givenThreeDefaultAccounts();
 		given1000USDTransferAmount();
@@ -148,7 +149,7 @@ public class CustomerTest {
 	}
 
 	@Test
-	public void transferBetweenCheckingAndSavingInsufficientFareTest() throws OpenAccountException {
+	public void transferBetweenCheckingAndSavingInsufficientFareTest() throws OpenAccountException, TransactionException, TransferException {
 		givenADefaultCustomer();
 		givenThreeDefaultAccounts();
 		given1000USDTransferAmount();
@@ -157,7 +158,7 @@ public class CustomerTest {
 	}
 
 	@Test(expected = TransferException.class)
-	public void transferBetweenCheckingAndSavingNullAmountTest() throws OpenAccountException {
+	public void transferBetweenCheckingAndSavingNullAmountTest() throws OpenAccountException, TransactionException, TransferException {
 		givenADefaultCustomer();
 		givenThreeDefaultAccounts();
 		givenANullTransferAmount();
@@ -165,7 +166,7 @@ public class CustomerTest {
 	}
 
 	@Test(expected = TransferException.class)
-	public void transferBetweenCheckingAndSavingNegativeAmountTest() throws OpenAccountException {
+	public void transferBetweenCheckingAndSavingNegativeAmountTest() throws OpenAccountException, TransactionException, TransferException {
 		givenADefaultCustomer();
 		givenThreeDefaultAccounts();
 		givenANegativeTransferAmount();
@@ -173,7 +174,7 @@ public class CustomerTest {
 	}
 
 	@Test(expected = TransferException.class)
-	public void transferBetweenCheckingAndSavingCheckingNotExistsTest() throws OpenAccountException {
+	public void transferBetweenCheckingAndSavingCheckingNotExistsTest() throws OpenAccountException, TransactionException, TransferException {
 		givenADefaultCustomer();
 		givenAnOpenedSavingsAccount();
 		given1000USDTransferAmount();
@@ -181,6 +182,7 @@ public class CustomerTest {
 	}
 
 	// TODO Isabel test transfer for different types of accounts
+	// TODO ISabel test for withdraw succeeds but deposit fails
 
 	private final static String CUSTOMER_NAME = "TEST-NAME";
 	private final static int NUMBER_OF_ACCOUNTS_TO_OPEN = 4;
@@ -269,25 +271,25 @@ public class CustomerTest {
 		openNumberOfAccounts(expectedNumberOfAccounts);
 	}
 
-	private void givenThreeDefaultAccounts() throws OpenAccountException {
+	private void givenThreeDefaultAccounts() throws OpenAccountException, TransactionException {
 		givenAnOpenedCheckingAccount();
 		givenAnOpenedSavingsAccount();
 		givenAnOpenedMaxiSavingAccount();
 	}
 
-	private void givenAnOpenedCheckingAccount() throws OpenAccountException {
+	private void givenAnOpenedCheckingAccount() throws OpenAccountException, TransactionException {
 		checkingAccount = customer.openAccount(AccountType.CHECKING);
 		checkingAccount.deposit(DEFAULT_CHECKING_BALANCE);
 	}
 
-	private void givenAnOpenedSavingsAccount() throws OpenAccountException {
+	private void givenAnOpenedSavingsAccount() throws OpenAccountException, TransactionException {
 		savingsAccount = customer.openAccount(AccountType.SAVINGS);
-		checkingAccount.deposit(DEFAULT_SAVINGS_BALANCE);
+		savingsAccount.deposit(DEFAULT_SAVINGS_BALANCE);
 	}
 
-	private void givenAnOpenedMaxiSavingAccount() throws OpenAccountException {
+	private void givenAnOpenedMaxiSavingAccount() throws OpenAccountException, TransactionException {
 		maxiSavingsAccount = customer.openAccount(AccountType.MAXI_SAVINGS);
-		checkingAccount.deposit(DEFAULT_MAXI_SAVINGS_BALANCE);
+		maxiSavingsAccount.deposit(DEFAULT_MAXI_SAVINGS_BALANCE);
 	}
 
 	private void given1000USDTransferAmount() {
@@ -327,19 +329,19 @@ public class CustomerTest {
 		returnedStatement = customer.getStatement();
 	}
 
-	private void whenTransferingFromSavingsToChecking() {
+	private void whenTransferingFromSavingsToChecking() throws TransferException {
 		returnedTransferResult = customer.transfer(savingsAccount, checkingAccount, transferAmount);
 		expectedNewSavingsBalance = DEFAULT_SAVINGS_BALANCE.subtract(transferAmount);
 		expectedNewCheckingBalance = DEFAULT_CHECKING_BALANCE.add(transferAmount);
 	}
 
-	private void whenTransferingFromCheckingToSaving() {
+	private void whenTransferingFromCheckingToSaving() throws TransferException {
 		returnedTransferResult = customer.transfer(checkingAccount, savingsAccount, transferAmount);
 		expectedNewSavingsBalance = DEFAULT_SAVINGS_BALANCE.add(transferAmount);
 		expectedNewCheckingBalance = DEFAULT_CHECKING_BALANCE.subtract(transferAmount);
 	}
 
-	private void whenTransferingFromCheckingToChecking() {
+	private void whenTransferingFromCheckingToChecking() throws TransferException {
 		returnedTransferResult = customer.transfer(checkingAccount, checkingAccount, transferAmount);
 		expectedNewCheckingBalance = DEFAULT_CHECKING_BALANCE;
 	}

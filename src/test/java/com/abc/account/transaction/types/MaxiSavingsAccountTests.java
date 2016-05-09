@@ -11,12 +11,13 @@ import org.junit.Test;
 import com.abc.account.IAccount;
 import com.abc.account.factory.AccountCreationException;
 import com.abc.account.factory.AccountFactory;
+import com.abc.account.transaction.TransactionException;
 import com.abc.account.types.AccountType;
 
 public class MaxiSavingsAccountTests {
 
 	@Test
-	public void maxSavingsAccInterestRates500USDTest() throws AccountCreationException {
+	public void maxSavingsAccInterestRates500USDTest() throws AccountCreationException, TransactionException {
 		givenASavingsAccount();
 		given500USDToDeposit();
 		givenADeposit();
@@ -25,7 +26,7 @@ public class MaxiSavingsAccountTests {
 	}
 
 	@Test
-	public void maxSavingsAccInterestRates1000USDTest() throws AccountCreationException {
+	public void maxSavingsAccInterestRates1000USDTest() throws AccountCreationException, TransactionException {
 		givenASavingsAccount();
 		given1000USDToDeposit();
 		givenADeposit();
@@ -34,7 +35,7 @@ public class MaxiSavingsAccountTests {
 	}
 
 	@Test
-	public void maxSavingsAccInterestRates1157USDTest() throws AccountCreationException {
+	public void maxSavingsAccInterestRates1157USDTest() throws AccountCreationException, TransactionException {
 		givenASavingsAccount();
 		given1157USDToDeposit();
 		givenADeposit();
@@ -43,7 +44,7 @@ public class MaxiSavingsAccountTests {
 	}
 
 	@Test
-	public void maxSavingsAccInterestRates1157And89USDTest() throws AccountCreationException {
+	public void maxSavingsAccInterestRates1157And89USDTest() throws AccountCreationException, TransactionException {
 		givenASavingsAccount();
 		given1157And89USDToDeposit();
 		givenADeposit();
@@ -60,7 +61,7 @@ public class MaxiSavingsAccountTests {
 	}
 
 	@Test
-	public void maxSavingsAccInterestRates2000USDTest() throws AccountCreationException {
+	public void maxSavingsAccInterestRates2000USDTest() throws AccountCreationException, TransactionException {
 		givenASavingsAccount();
 		given2000USDToDeposit();
 		givenADeposit();
@@ -69,7 +70,7 @@ public class MaxiSavingsAccountTests {
 	}
 
 	@Test
-	public void maxSavingsAccInterestRates2500USDTest() throws AccountCreationException {
+	public void maxSavingsAccInterestRates2500USDTest() throws AccountCreationException, TransactionException {
 		givenASavingsAccount();
 		given2500USDToDeposit();
 		givenADeposit();
@@ -78,7 +79,7 @@ public class MaxiSavingsAccountTests {
 	}
 
 	@Test
-	public void maxSavingsAccInterestRates10700USDTest() throws AccountCreationException {
+	public void maxSavingsAccInterestRates10700USDTest() throws AccountCreationException, TransactionException {
 		givenASavingsAccount();
 		given10700USDToDeposit();
 		givenADeposit();
@@ -142,7 +143,7 @@ public class MaxiSavingsAccountTests {
 		expectedInterest = new BigDecimal("940");
 	}
 
-	private void givenADeposit() {
+	private void givenADeposit() throws TransactionException {
 		account.deposit(balance);
 	}
 
