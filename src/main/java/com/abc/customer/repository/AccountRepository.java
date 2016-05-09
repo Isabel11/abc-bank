@@ -20,7 +20,7 @@ public class AccountRepository {
 		accounts = new LinkedList<>();
 	}
 
-	public boolean addAccount(final IAccount account) {
+	public synchronized boolean addAccount(final IAccount account) {
 		if (account == null) {
 			return false;
 		}
@@ -28,11 +28,11 @@ public class AccountRepository {
 		return accounts.add(account);
 	}
 
-	public List<IAccount> getAllAccounts() {
+	public synchronized List<IAccount> getAllAccounts() {
 		return Collections.unmodifiableList(accounts);
 	}
 
-	public int size() {
+	public synchronized int size() {
 		return accounts.size();
 	}
 

@@ -11,11 +11,11 @@ import com.abc.account.Account;
  */
 public class SavingsAccount extends Account {
 
-	private static final BigDecimal SAVING_ACC_MARGIN = BigDecimal.valueOf(1000);
+	private static final BigDecimal SAV_ACC_THRESHOLD_IN_USD = new BigDecimal("1000");
 
-	private static final BigDecimal SAVING_ACC_FIRST_1000_USD = BigDecimal.valueOf(0.001d);
+	private static final BigDecimal INTEREST_BEFORE_THRES_IN_PC = new BigDecimal("0.001");
 
-	private static final BigDecimal SAVING_ACC_AFTER_1000_USD = BigDecimal.valueOf(0.002d);
+	private static final BigDecimal INTEREST_AFTER_THRES_IN_PC = new BigDecimal("0.002");
 
 	public SavingsAccount() {
 		super(AccountType.SAVINGS);
@@ -23,12 +23,13 @@ public class SavingsAccount extends Account {
 
 	@Override
 	public BigDecimal interestEarned() {
-		final BigDecimal sumOfAllTransactions = sumTransactions();
-		if (sumOfAllTransactions.compareTo(SAVING_ACC_MARGIN) <= 0) {
-			return sumOfAllTransactions.multiply(SAVING_ACC_FIRST_1000_USD);
+		final BigDecimal sumOfTrans = sumTransactions();
+		if (sumOfTrans.compareTo(SAV_ACC_THRESHOLD_IN_USD) <= 0) {
+			return sumOfTrans.multiply(INTEREST_BEFORE_THRES_IN_PC);
 		} else {
-			// TODO tomorrow too tired
-			return sumOfAllTransactions.multiply(SAVING_ACC_FIRST_1000_USD);
+			final BigDecimal interestBeforeThres = SAV_ACC_THRESHOLD_IN_USD.multiply(INTEREST_BEFORE_THRES_IN_PC);
+			final BigDecimal interestAfterThres = sumOfTrans.subtract(SAV_ACC_THRESHOLD_IN_USD).multiply(INTEREST_AFTER_THRES_IN_PC);
+			return interestBeforeThres.add(interestAfterThres);
 		}
 	}
 }

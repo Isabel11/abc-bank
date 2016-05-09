@@ -12,7 +12,8 @@ public class TransactionRepository {
 		this.transactions = new LinkedList<>();
 	}
 
-	public boolean addTransaction(ITransaction transaction) {
+	// TODO evaluate lock vs synchronized
+	public synchronized boolean addTransaction(final ITransaction transaction) {
 		if (transaction == null) {
 			return false;
 		} else {
@@ -20,7 +21,7 @@ public class TransactionRepository {
 		}
 	}
 
-	public List<ITransaction> getAllTransactions() {
+	public synchronized List<ITransaction> getAllTransactions() {
 		return Collections.unmodifiableList(transactions);
 	}
 }
