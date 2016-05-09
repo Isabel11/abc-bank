@@ -14,7 +14,7 @@ import com.google.common.base.Objects;
 /**
  * Representation of a concrete bank that implements the behaviour of the
  * interface {@link IBank}.
- * 
+ *
  * @author Isabel Peters (isabel.rlpeters@googlemail.com)
  *
  */
@@ -30,14 +30,14 @@ public class Bank implements IBank {
 		this(new CustomerRepository(), name);
 	}
 
-	// TODO Isabel use @NotNull
-	public Bank(final CustomerRepository customerRepository, String name) {
+	public Bank(final CustomerRepository customerRepository, final String name) {
+		// Verify params
 		this.name = name;
 		this.customerRepository = customerRepository;
 	}
 
 	@Override
-	public boolean addCustomer(Customer customer) {
+	public boolean addCustomer(final Customer customer) {
 		if (customer == null) {
 			return false;
 		}
@@ -52,7 +52,7 @@ public class Bank implements IBank {
 	@Override
 	public BigDecimal totalInterestPaid() {
 		BigDecimal total = BigDecimal.ZERO;
-		for (ICustomer customer : customerRepository.getAllCustomers()) {
+		for (final ICustomer customer : customerRepository.getAllCustomers()) {
 			total = total.add(customer.totalInterestEarned());
 		}
 		return total;
@@ -62,7 +62,7 @@ public class Bank implements IBank {
 	public ICustomer getFirstCustomer() throws NoCustomerException {
 		try {
 			return customerRepository.getFirstCustomer();
-		} catch (NoCustomerException e) {
+		} catch (final NoCustomerException e) {
 			LOGGER.log(Level.WARNING, "Failed to get first customer of bank " + name + ". Reason: " + e.getMessage());
 			throw e;
 		}
@@ -74,7 +74,7 @@ public class Bank implements IBank {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		if (obj == null)
 			return false;
 		if (getClass() != obj.getClass())

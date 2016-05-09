@@ -1,14 +1,14 @@
 package com.abc.customer;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 
-import com.abc.account.Account;
 import com.abc.account.IAccount;
+import com.abc.account.factory.AccountCreationException;
+import com.abc.account.factory.AccountFactory;
 import com.abc.account.statement.AccountStatementGenerator;
 import com.abc.account.types.AccountType;
 import com.abc.customer.exception.OpenAccountException;
+import com.abc.customer.repository.AccountRepository;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
@@ -23,11 +23,11 @@ public class Customer implements ICustomer {
 
 	private final String name;
 
-	private final List<IAccount> accounts;
+	private final AccountRepository accounts;
 
 	public Customer(final String name) {
 		this.name = name;
-		this.accounts = new ArrayList<>();
+		this.accounts = new AccountRepository();
 	}
 
 	@Override
@@ -36,9 +36,15 @@ public class Customer implements ICustomer {
 	}
 
 	@Override
-	public Account openAccount(final AccountType accountType) throws OpenAccountException {
-		// TODO implement
-		return null;
+	public IAccount openAccount(final AccountType accountType) throws OpenAccountException {
+		IAccount newAccount;
+		try {
+			newAccount = AccountFactory.create(accountType);
+			accounts.addAccount(newAccount);
+		} catch (final AccountCreationException e) {
+			throw new OpenAccountException("Failed to open new account of type " + accountType, e);
+		}
+		return newAccount;
 	}
 
 	@Override
@@ -50,7 +56,7 @@ public class Customer implements ICustomer {
 	public BigDecimal totalInterestEarned() {
 		BigDecimal totalInterests = BigDecimal.ZERO;
 
-		for (final IAccount account : accounts) {
+		for (final IAccount account : accounts.getAllAccounts()) {
 			totalInterests = totalInterests.add(account.interestEarned());
 		}
 
@@ -59,7 +65,7 @@ public class Customer implements ICustomer {
 
 	@Override
 	public String getStatement() {
-		return AccountStatementGenerator.generateForAllAccounts(this, accounts);
+		return AccountStatementGenerator.generateForAllAccounts(this, accounts.getAllAccounts());
 	}
 
 	@Override

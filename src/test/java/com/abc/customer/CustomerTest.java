@@ -3,24 +3,31 @@ package com.abc.customer;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
+import static org.mockito.Matchers.any;
 
 import java.util.LinkedList;
 import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
-import com.abc.account.Account;
+import com.abc.account.IAccount;
 import com.abc.account.factory.AccountCreationException;
+import com.abc.account.factory.AccountFactory;
 import com.abc.account.types.AccountType;
 import com.abc.customer.exception.OpenAccountException;
 
 /**
- * 
+ *
  * @author Isabel Peters (isabel.rlpeters@googlemail.com)
  *
  */
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({ AccountFactory.class })
 public class CustomerTest {
 
 	@Test
@@ -54,7 +61,7 @@ public class CustomerTest {
 		thenCustomerOpenedExpectedAccount();
 	}
 
-	@Test(expected = AccountCreationException.class)
+	@Test(expected = OpenAccountException.class)
 	public void customerOpensNullAccountType() throws OpenAccountException {
 		givenADefaultCustomer();
 		givenANullAccountType();
@@ -86,10 +93,10 @@ public class CustomerTest {
 	}
 
 	@Test
-	public void failedOpenedAccountNumberOfAccountsTest() {
+	public void failedOpenedAccountNumberOfAccountsTest() throws Exception {
 		givenADefaultCustomer();
-		givenAnOpenedAccountFailure();
-		whenRequestingNumberOfAccounts();
+		givenAnOpenAccountFailure();
+		whenOpeningAnAccountThatFails();
 		thenNoAccountsHaveBeenOpened();
 	}
 
@@ -123,7 +130,7 @@ public class CustomerTest {
 
 	private String name;
 	private ICustomer customer;
-	private Account returnedOpenedAccount;
+	private IAccount returnedOpenedAccount;
 	private AccountType expectedAccountType;
 	private List<AccountType> accountTypesToOpen;
 	private List<AccountType> returnedOpenedAccountTypes;
@@ -165,7 +172,7 @@ public class CustomerTest {
 	}
 
 	private void givenMultipleAccountTypesToOpen() {
-		AccountType[] accountTypes = AccountType.values();
+		final AccountType[] accountTypes = AccountType.values();
 		for (int i = 0; i < NUMBER_OF_ACCOUNTS_TO_OPEN; i++) {
 			accountTypesToOpen.add(accountTypes[i % accountTypes.length]);
 		}
@@ -181,9 +188,12 @@ public class CustomerTest {
 		openNumberOfAccounts(expectedNumberOfAccounts);
 	}
 
-	private void givenAnOpenedAccountFailure() {
-		// TODO Isabel use mockito here to mock failure
-		fail("Implement this");
+	private void givenAnOpenAccountFailure() throws Exception {
+		PowerMockito.mockStatic(AccountFactory.class);
+		// PowerMockito.when(AccountFactory.create(any(AccountType.class))).thenThrow(new
+		// AccountCreationException("Expected exception"));
+		PowerMockito.doThrow(new AccountCreationException("Expected exception")).when(AccountFactory.class, "create", any(AccountType.class));
+		// AccountFactory.create(any(AccountType.class));
 	}
 
 	// WHEN
@@ -198,7 +208,7 @@ public class CustomerTest {
 
 	private void whenOpeningMultipleAccounts() throws OpenAccountException {
 		for (int i = 0; i < accountTypesToOpen.size(); i++) {
-			Account openedAccount = customer.openAccount(accountTypesToOpen.get(i));
+			final IAccount openedAccount = customer.openAccount(accountTypesToOpen.get(i));
 			returnedOpenedAccountTypes.add(openedAccount.getAccountType());
 		}
 	}
@@ -209,6 +219,14 @@ public class CustomerTest {
 
 	private void whenRequestingAStatement() {
 		returnedStatement = customer.getStatement();
+	}
+
+	private void whenOpeningAnAccountThatFails() {
+		try {
+			customer.openAccount(expectedAccountType);
+		} catch (final OpenAccountException e) {
+			// Expected failure
+		}
 	}
 
 	// THEN
@@ -244,7 +262,7 @@ public class CustomerTest {
 
 	// HELPER
 
-	private void openNumberOfAccounts(int numberOfAccountsToOpen) throws OpenAccountException {
+	private void openNumberOfAccounts(final int numberOfAccountsToOpen) throws OpenAccountException {
 		for (int i = 0; i < numberOfAccountsToOpen; i++) {
 			customer.openAccount(AccountType.CHECKING);
 		}

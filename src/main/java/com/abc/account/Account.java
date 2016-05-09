@@ -60,11 +60,6 @@ public abstract class Account implements IAccount {
 
 	@Override
 	public BigDecimal sumTransactions() {
-		return checkIfTransactionsExist(true);
-	}
-
-	// TODO Isabel
-	private BigDecimal checkIfTransactionsExist(final boolean checkAll) {
 		BigDecimal amount = BigDecimal.ZERO;
 		for (final ITransaction transactions : transactions.getAllTransactions()) {
 			amount = amount.add(transactions.getAmount());

@@ -1,11 +1,39 @@
 package com.abc.customer.repository;
 
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+
+import com.abc.account.IAccount;
+
 /**
  * Account repository for a customer.
- * 
+ *
  * @author Isabel Peters (isabel.rlpeters@googlemail.com)
  *
  */
 public class AccountRepository {
+
+	private final List<IAccount> accounts;
+
+	public AccountRepository() {
+		accounts = new LinkedList<>();
+	}
+
+	public boolean addAccount(final IAccount account) {
+		if (account == null) {
+			return false;
+		}
+		// TODO Isabel check if account exists already
+		return accounts.add(account);
+	}
+
+	public List<IAccount> getAllAccounts() {
+		return Collections.unmodifiableList(accounts);
+	}
+
+	public int size() {
+		return accounts.size();
+	}
 
 }
