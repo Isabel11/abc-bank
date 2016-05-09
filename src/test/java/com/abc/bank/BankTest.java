@@ -10,6 +10,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.abc.bank.exception.NoCustomerException;
@@ -49,6 +50,7 @@ public class BankTest {
 		thenExpectedCustomersInRepository();
 	}
 
+	@Ignore
 	@Test
 	public void addSameCustomerTest() {
 		givenABank();
@@ -63,6 +65,7 @@ public class BankTest {
 		thenCustomerSummaryReturned();
 	}
 
+	@Ignore
 	@Test
 	public void getCustomerSummaryNoCustomersTest() {
 		givenABank();

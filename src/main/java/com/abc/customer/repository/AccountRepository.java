@@ -5,8 +5,6 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.eclipse.jdt.annotation.NonNull;
-
 import com.abc.account.IAccount;
 import com.abc.account.transaction.ITransaction;
 import com.abc.account.transaction.TransactionException;
@@ -54,7 +52,7 @@ public class AccountRepository {
 		return accounts.contains(account);
 	}
 
-	public synchronized boolean transfer(@NonNull final IAccount from, @NonNull final IAccount to, @NonNull final BigDecimal amount) throws TransferException {
+	public synchronized boolean transfer(final IAccount from, final IAccount to, final BigDecimal amount) throws TransferException {
 		try {
 			final ITransaction withdraw = from.withdraw(amount);
 			if (withdraw.wasSuccessful()) {
