@@ -19,7 +19,7 @@ import com.abc.customer.ICustomer;
 
 /**
  * Tests the behaviour of the bank.
- * 
+ *
  * @author Isabel Peters (isabel.rlpeters@googlemail.com)
  *
  */
@@ -145,7 +145,7 @@ public class BankTest {
 	}
 
 	private void givenACustomerAddedToTheBank() {
-		Customer customer = new Customer(DEFAULT_CUSTOMER_NAME);
+		final Customer customer = new Customer(DEFAULT_CUSTOMER_NAME);
 		expectedFirstCustomer = customer;
 		bank.addCustomer(customer);
 	}
@@ -153,7 +153,7 @@ public class BankTest {
 	private void givenMultipleCustomersAddedToTheBank() {
 		expectedNumberOfCustomers = 4;
 		for (int i = 0; i < expectedNumberOfCustomers; i++) {
-			Customer customer = new Customer(DEFAULT_CUSTOMER_NAME + i);
+			final Customer customer = new Customer(DEFAULT_CUSTOMER_NAME + i);
 			if (i == 0) {
 				expectedFirstCustomer = customer;
 			}

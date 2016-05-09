@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 import com.abc.account.Account;
 
 /**
- * 
+ *
  * @author Isabel Peters (isabel.rlpeters@googlemail.com)
  *
  */
@@ -20,6 +20,4 @@ public class SavingsAccount extends Account {
 		// TODO Auto-generated method stub
 		return BigDecimal.ZERO;
 	}
-
-	// TODO Isabel guava equals hashcode etc
 }

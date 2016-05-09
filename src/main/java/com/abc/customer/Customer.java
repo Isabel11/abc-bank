@@ -14,7 +14,7 @@ import com.google.common.base.Objects;
 
 /**
  * Representation of a bank customer.
- * 
+ *
  * @author Isabel Peters (isabel.rlpeters@googlemail.com)
  */
 public class Customer implements ICustomer {
@@ -36,7 +36,7 @@ public class Customer implements ICustomer {
 	}
 
 	@Override
-	public Account openAccount(AccountType accountType) throws OpenAccountException {
+	public Account openAccount(final AccountType accountType) throws OpenAccountException {
 		// TODO implement
 		return null;
 	}
@@ -50,7 +50,7 @@ public class Customer implements ICustomer {
 	public BigDecimal totalInterestEarned() {
 		BigDecimal totalInterests = BigDecimal.ZERO;
 
-		for (IAccount account : accounts) {
+		for (final IAccount account : accounts) {
 			totalInterests = totalInterests.add(account.interestEarned());
 		}
 
@@ -68,18 +68,21 @@ public class Customer implements ICustomer {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		if (obj == null)
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
 		final Customer other = (Customer) obj;
-		return Objects.equal(this.name, other.name) && Objects.equal(this.accounts, other.accounts);
+		return Objects.equal(this.name, other.name) //
+				&& Objects.equal(this.accounts, other.accounts);
 	}
 
 	@Override
 	public String toString() {
-		return MoreObjects.toStringHelper(this).add("name", name).add("accounts", accounts).toString();
+		return MoreObjects.toStringHelper(this).add("name", name)//
+				.add("accounts", accounts)//
+				.toString();
 	}
 
 }
